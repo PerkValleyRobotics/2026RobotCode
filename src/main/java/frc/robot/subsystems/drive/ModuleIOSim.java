@@ -23,8 +23,8 @@ public class ModuleIOSim implements ModuleIO {
 
   private boolean driveClosedLoop = false;
   private boolean turnClosedLoop = false;
-  private PIDController driveController = new PIDController(driveSimP, 0, driveSimD);
-  private PIDController turnController = new PIDController(turnSimP, 0, turnSimD);
+  private PIDController driveController = new PIDController(DRIVE_SIMP, 0, DRIVE_SIMD);
+  private PIDController turnController = new PIDController(TURN_SIMP, 0, TURN_SIMD);
   private double driveFFVolts = 0.0;
   private double driveAppliedVolts = 0.0;
   private double turnAppliedVolts = 0.0;
@@ -33,11 +33,11 @@ public class ModuleIOSim implements ModuleIO {
     // Create drive and turn sim models
     driveSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(driveGearbox, 0.025, driveMotorReduction),
+            LinearSystemId.createDCMotorSystem(driveGearbox, 0.025, DRIVE_MOTOR_REDUCTION),
             driveGearbox);
     turnSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(turnGearbox, 0.004, turnMotorReduction),
+            LinearSystemId.createDCMotorSystem(turnGearbox, 0.004, TURN_MOTOR_REDUCTION),
             turnGearbox);
 
     // Enable wrapping for turn PID
@@ -101,7 +101,7 @@ public class ModuleIOSim implements ModuleIO {
   @Override
   public void setDriveVelocity(double velocityRadPerSec) {
     driveClosedLoop = true;
-    driveFFVolts = driveSimKs * Math.signum(velocityRadPerSec) + driveSimKv * velocityRadPerSec;
+    driveFFVolts = DRIVE_SIMKS * Math.signum(velocityRadPerSec) + DRIVE_SIMKV * velocityRadPerSec;
     driveController.setSetpoint(velocityRadPerSec);
   }
 
