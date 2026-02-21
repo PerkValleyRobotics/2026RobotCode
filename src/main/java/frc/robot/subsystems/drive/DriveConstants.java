@@ -32,27 +32,30 @@ public class DriveConstants {
       };
 
   // Zeroed rotation values for each module, see setup instructions
-  public static final Rotation2d frontLeftZeroRotation = new Rotation2d(0.0);
-  public static final Rotation2d frontRightZeroRotation = new Rotation2d(0.0);
-  public static final Rotation2d backLeftZeroRotation = new Rotation2d(0.0);
-  public static final Rotation2d backRightZeroRotation = new Rotation2d(0.0);
+  public static final Rotation2d frontLeftZeroRotation = new Rotation2d(-3.117); // 0
+  public static final Rotation2d frontRightZeroRotation = new Rotation2d(-2.984); // 1
+  public static final Rotation2d backLeftZeroRotation = new Rotation2d(-0.040); // 2
+  public static final Rotation2d backRightZeroRotation = new Rotation2d(-2.201); // 3
 
   // Device CAN IDs
-
-  public static final int FRONT_LEFT_DRIVE_ID = 01;
+  public static final int FRONT_LEFT_DRIVE_ID = 1;
   public static final int FRONT_RIGHT_DRIVE_ID = 11;
-  public static final int BACK_RIGHT_DRIVE_ID = 21;
-  public static final int BACK_LEFT_DRIVE_ID = 31;
+  public static final int BACK_LEFT_DRIVE_ID = 21;
+  public static final int BACK_RIGHT_DRIVE_ID = 31;
 
-  public static final int FRONT_LEFT_TURN_ID = 02;
+  public static final int FRONT_LEFT_TURN_ID = 2;
   public static final int FRONT_RIGHT_TURN_ID = 12;
-  public static final int BACK_RIGHT_TURN_ID = 22;
-  public static final int BACK_LEFT_TURN_ID = 32;
+  public static final int BACK_LEFT_TURN_ID = 22;
+  public static final int BACK_RIGHT_TURN_ID = 32;
 
+  public static final int FRONT_LEFT_CANCODER_ID = 3;
+  public static final int FRONT_RIGHT_CANCODER_ID = 13;
+  public static final int BACK_LEFT_CANCODER_ID = 23;
+  public static final int BACK_RIGHT_CANCODER_ID = 33;
   // Drive motor configuration
   public static final int DRIVE_MOTOR_MAX_AMPERAGE = 50;
   public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(2);
-  public static final double DRIVE_MOTOR_REDUCTION = (50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0);
+  public static final double DRIVE_MOTOR_REDUCTION = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
   // ported from last year
   public static final DCMotor driveGearbox = DCMotor.getNEO(1);
 
@@ -75,18 +78,20 @@ public class DriveConstants {
   public static final double DRIVE_SIMKV = 0.0789;
 
   // Turn motor configuration
-  public static final boolean TURN_INVERTED = false;
-  public static final int TURN_MOTOR_MAX_AMPERAGE = 20;
-  public static final double TURN_MOTOR_REDUCTION = 150.0 / 7.0;
+  public static final boolean TURN_INVERTED = true;
+  public static final int TURN_MOTOR_MAX_AMPERAGE = 50;
+  public static final double TURN_MOTOR_REDUCTION = 150 / 7;
   public static final DCMotor turnGearbox = DCMotor.getNEO(1);
   // Turn encoder configuration
   public static final boolean TURN_ENCODER_INVERTED = true;
-  public static final double TURN_ENCODER_POSITION_FACTOR = 2 * Math.PI; // Rotations -> Radians
-  public static final double TURN_ENCODER_VELOCITY_FACTOR = (2 * Math.PI) / 60.0; // RPM -> Rad/Sec
+  public static final double TURN_ENCODER_POSITION_FACTOR =
+      2 * Math.PI / TURN_MOTOR_REDUCTION; // Rotations -> Radians
+  public static final double TURN_ENCODER_VELOCITY_FACTOR =
+      (2 * Math.PI) / 60.0 / TURN_MOTOR_REDUCTION; // RPM -> Rad/Sec
 
   // Turn PID configuration
-  public static final double TURN_KP = 2.0;
-  public static final double TURN_KD = 0.0;
+  public static final double TURN_KP = 0.5;
+  public static final double TURN_KD = 0.1;
   public static final double TURN_SIMP = 8.0;
   public static final double TURN_SIMD = 0.0;
   public static final double TURN_PID_MIN_INPUT = 0; // Radians
