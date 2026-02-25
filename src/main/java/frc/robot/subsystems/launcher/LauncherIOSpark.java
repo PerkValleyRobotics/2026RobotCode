@@ -38,6 +38,7 @@ public class LauncherIOSpark implements LauncherIO {
     private final Debouncer shootDebounce = new Debouncer(0.05);
     private final Debouncer turnDebounce = new Debouncer(0.05);
 
+
     private SparkClosedLoopController turningController;
 
     public LauncherIOSpark() {

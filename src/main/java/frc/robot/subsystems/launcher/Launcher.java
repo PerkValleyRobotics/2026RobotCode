@@ -6,7 +6,6 @@ package frc.robot.subsystems.launcher;
 
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_ANGLE_MIN_LIMIT;
 
-import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,11 +38,15 @@ public class Launcher extends SubsystemBase {
 
   public void turnHoodAngle(double angleDegrees) {
     this.setpoint = angleDegrees;
-    io.turnHoodAngle(angleDegrees);
+    io.turnHoodAngle(setpoint);
+  }
+
+  public void incrementHoodAngle(){
+    io.turnHoodAngle(++this.setpoint);
   }
 
   public void resetHoodAngle(double angleDegrees) {
     this.setpoint = HOOD_ANGLE_MIN_LIMIT;
-    io.turnHoodAngle(HOOD_ANGLE_MIN_LIMIT);
+    io.turnHoodAngle(setpoint);
   }
 }
