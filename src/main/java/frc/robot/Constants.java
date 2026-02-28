@@ -28,4 +28,7 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public static final boolean COMPETITION_MODE = false;
+  
 }
