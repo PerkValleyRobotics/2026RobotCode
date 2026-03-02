@@ -7,10 +7,12 @@ package frc.robot.subsystems.launcher;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_ANGLE_MIN_LIMIT;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.trajectoryCalc.LauncherTrajectoryCalc;
 import org.littletonrobotics.junction.Logger;
 
 public class Launcher extends SubsystemBase {
   private LauncherIO io;
+  private LauncherTrajectoryCalc trajectoryCalculator;
   private final LauncherIOInputsAutoLogged inputs = new LauncherIOInputsAutoLogged();
 
   double setpoint;

@@ -30,5 +30,4 @@ public final class Constants {
   }
 
   public static final boolean COMPETITION_MODE = false;
-  
 }
