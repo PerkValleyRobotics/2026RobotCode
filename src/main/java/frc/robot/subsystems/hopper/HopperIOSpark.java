@@ -36,7 +36,7 @@ public class HopperIOSpark implements HopperIO {
     HopperConf.idleMode(IdleMode.kCoast)
         .smartCurrentLimit(HOPPER_MAX_AMPERAGE)
         .voltageCompensation(12.0)
-        .inverted(false);
+        .inverted(true);
     HopperConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
     tryUntilOk(
         hopperMotor,
