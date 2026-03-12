@@ -25,6 +25,7 @@ public class Launcher extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+    io.launcherWarning();
     Logger.processInputs("Launcher", inputs);
   }
 

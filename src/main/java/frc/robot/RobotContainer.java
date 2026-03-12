@@ -17,7 +17,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.IndexerCommands;
+import frc.robot.commands.HopperCommands;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -25,13 +26,18 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
-import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.indexer.IndexerIO;
-import frc.robot.subsystems.indexer.IndexerIOSpark;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOSpark;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSpark;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherIO;
 import frc.robot.subsystems.launcher.LauncherIOSim;
 import frc.robot.subsystems.launcher.LauncherIOSpark;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIOLimelight;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -44,7 +50,9 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Launcher launcher;
-  private final Indexer indexer;
+  private final Intake intake;
+  private final Hopper hopper;
+  private final Vision vision;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -66,7 +74,13 @@ public class RobotContainer {
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
         launcher = new Launcher(new LauncherIOSpark());
-        indexer = new Indexer(new IndexerIOSpark());
+        intake = new Intake(new IntakeIOSpark());
+        hopper = new Hopper(new HopperIOSpark());
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOLimelight("limelight_0", drive::getRotation));
+
         break;
 
       case SIM:
@@ -79,7 +93,10 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         launcher = new Launcher(new LauncherIOSim());
-        indexer = new Indexer(new IndexerIO() {});
+        intake = new Intake(new IntakeIO() {});
+        hopper = new Hopper(new HopperIO() {});
+        vision = null;
+
         break;
 
       default:
@@ -92,8 +109,10 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         launcher = new Launcher(new LauncherIO() {});
-        indexer = new Indexer(new IndexerIO() {});
+        intake = new Intake(new IntakeIO() {});
+        hopper = new Hopper(new HopperIO() {});
 
+        vision = null;
         break;
     }
 
@@ -168,7 +187,13 @@ public class RobotContainer {
 
     // OPERATOR CONTROLLER
     operatorController.leftTrigger().whileTrue(LauncherCommands.runLauncher(launcher));
-    operatorController.rightTrigger().whileTrue(IndexerCommands.runIndexer(indexer));
+    // operatorController.rightTrigger().whileTrue(HopperCommands.runHopper(hopper));
+    operatorController.b().whileTrue(HopperCommands.runHopper(hopper));
+    operatorController.a().whileTrue(IntakeCommands.runIntake(intake));
+
+    operatorController.leftBumper().whileTrue(IntakeCommands.incrementIntake(intake));
+    operatorController.rightBumper().whileTrue(IntakeCommands.incrementIntake(intake));
+    // TODO: add intake stuff and shit
   }
 
   /**

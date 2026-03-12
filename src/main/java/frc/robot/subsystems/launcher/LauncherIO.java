@@ -16,6 +16,8 @@ public interface LauncherIO {
     double turningMotorPositionDeg = 0.0;
     double turningMotorAppliedVolts = 0.0;
     double turningMotorCurrentAmps = 0.0;
+
+    boolean shooterReady = false;
   }
 
   public default void updateInputs(LauncherIOInputs inputs) {}
@@ -23,4 +25,6 @@ public interface LauncherIO {
   public default void setShooterSpeed(double speed) {}
 
   public default void turnHoodAngle(double angleDegrees) {}
+
+  public default void launcherWarning() {}
 }

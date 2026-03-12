@@ -13,12 +13,13 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.filter.Debouncer;
+import frc.robot.util.Elastic;
+import frc.robot.util.Elastic.Notification;
 import java.util.function.DoubleSupplier;
 
 public class LauncherIOSpark implements LauncherIO {
@@ -34,7 +35,7 @@ public class LauncherIOSpark implements LauncherIO {
 
   public LauncherIOSpark() {
     shootingMotor = new SparkFlex(SHOOTING_MOTOR_ID, MotorType.kBrushless);
-    turningMotor = new SparkMax(TURNING_MOTOR_ID, MotorType.kBrushless);
+    turningMotor = new SparkFlex(TURNING_MOTOR_ID, MotorType.kBrushless);
 
     shootingEncoder = shootingMotor.getEncoder();
     turningEncoder = turningMotor.getEncoder();
@@ -87,12 +88,15 @@ public class LauncherIOSpark implements LauncherIO {
   public void updateInputs(LauncherIOInputs inputs) {
     boolean sparkStickyFault = false;
 
-    inputs.shootingMotorConnected = shootDebounce.calculate(sparkStickyFault);
+    inputs.shootingMotorConnected = shootDebounce.calculate(!sparkStickyFault);
 
     ifOk(
         shootingMotor,
         shootingEncoder::getVelocity,
-        (value) -> inputs.shootingMotorSpeedRadsPerSecond = value);
+        (value) -> {
+          inputs.shootingMotorSpeedRadsPerSecond = value;
+          inputs.shooterReady = value >= SHOOTER_TARGET_SPEED_RADS;
+        });
     ifOk(
         shootingMotor,
         new DoubleSupplier[] {shootingMotor::getBusVoltage, shootingMotor::getAppliedOutput},
@@ -102,7 +106,7 @@ public class LauncherIOSpark implements LauncherIO {
         shootingMotor::getOutputCurrent,
         (value) -> inputs.shootingMotorCurrentAmps = value);
 
-    inputs.turningMotorConnected = turnDebounce.calculate(sparkStickyFault);
+    inputs.turningMotorConnected = turnDebounce.calculate(!sparkStickyFault);
 
     ifOk(
         turningMotor,
@@ -125,5 +129,16 @@ public class LauncherIOSpark implements LauncherIO {
 
   public void turnHoodAngle(double angleDegrees) {
     turningController.setSetpoint(angleDegrees, ControlType.kPosition);
+  }
+
+  public void launcherWarning() {
+    if (shootingMotor.getMotorTemperature() >= SHOOTER_TEMP_HARD_LIMIT) {
+      Elastic.sendNotification(
+          new Notification()
+              .withLevel(Elastic.NotificationLevel.WARNING)
+              .withTitle("MOTOR OVERHEAT WARNING")
+              .withDescription("MOTOR IS EXTREMELY HOT. PROCESS WITH CAUTION.")
+              .withDisplaySeconds(8.0));
+    }
   }
 }

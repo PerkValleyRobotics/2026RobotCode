@@ -10,10 +10,15 @@ public interface IntakeIO {
     double intakeMotorAppliedVolts = 0.0;
     double intakeMotorCurrentAmps = 0.0;
 
-    boolean turningIntakeMotorConnected = false;
-    double turningIntakeMotorPositionDeg = 0.0;
-    double turningIntakeMotorAppliedVolts = 0.0;
-    double turningIntakeMotorCurrentAmps = 0.0;
+    double turnIntakeMotorPositionDeg = 0.0;
+
+    boolean turnLeftIntakeMotorConnected = false;
+    double turnLeftIntakeMotorAppliedVolts = 0.0;
+    double turnLeftIntakeMotorCurrentAmps = 0.0;
+
+    boolean turnRightIntakeMotorConnected = false;
+    double turnRightIntakeMotorAppliedVolts = 0.0;
+    double turnRightIntakeMotorCurrentAmps = 0.0;
   }
 
   public default void updateInputs(IntakeIOInputs inputs) {}

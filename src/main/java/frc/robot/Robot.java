@@ -106,7 +106,7 @@ public class Robot extends LoggedRobot {
             .withLevel(Elastic.NotificationLevel.INFO)
             .withTitle("Robot Disabled!")
             .withDescription("Robot has been disabled")
-            .withDisplaySeconds(5.0));
+            .withDisplaySeconds(3.0));
   }
 
   /** This function is called periodically when disabled. */
