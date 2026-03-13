@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.vision.Vision;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -289,4 +291,23 @@ public class DriveCommands {
     Rotation2d lastAngle = Rotation2d.kZero;
     double gyroDelta = 0.0;
   }
+
+  public static Command strafeLeft(Drive drive){
+    return Commands.run(
+      () -> {drive.runVelocity(new ChassisSpeeds(-2,0,0));}
+    ,drive).finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
+  }
+  
+  public static Command strafeRight(Drive drive){
+    return Commands.run(
+      () -> {drive.runVelocity(new ChassisSpeeds(2,0,0));}
+    ,drive).finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
+  }
+
+  // autolock
+  public static Command hubLock(Drive drive, Vision vision){
+    return Commands.run(() ->);
+  }
+ 
+  
 }

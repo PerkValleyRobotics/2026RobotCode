@@ -19,6 +19,8 @@ public class DriveConstants {
   // put a limiter here in order to reduce the speed of the drivetrain
   public static final double MAX_SPEED_METERS_PER_SEC = 4.8;
 
+  public static final double STRAFE_SPEED = 2.00;
+
   public static final double ODOMETRY_FREQUENCY = 100.0; // Hz
   public static final double TRACK_WIDTH = Units.inchesToMeters(22.162);
   public static final double WHEEL_BASE = Units.inchesToMeters(22.162);
