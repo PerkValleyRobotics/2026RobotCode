@@ -7,10 +7,13 @@
 
 package frc.robot.commands;
 
+import static frc.robot.FieldConstants.layout;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,12 +27,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
-import frc.robot.subsystems.vision.Vision;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -292,22 +294,33 @@ public class DriveCommands {
     double gyroDelta = 0.0;
   }
 
-  public static Command strafeLeft(Drive drive){
+  public static Command strafeLeft(Drive drive) {
     return Commands.run(
-      () -> {drive.runVelocity(new ChassisSpeeds(-2,0,0));}
-    ,drive).finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
+            () -> {
+              drive.runVelocity(new ChassisSpeeds(-2, 0, 0));
+            },
+            drive)
+        .finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
   }
-  
-  public static Command strafeRight(Drive drive){
+
+  public static Command strafeRight(Drive drive) {
     return Commands.run(
-      () -> {drive.runVelocity(new ChassisSpeeds(2,0,0));}
-    ,drive).finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
+            () -> {
+              drive.runVelocity(new ChassisSpeeds(2, 0, 0));
+            },
+            drive)
+        .finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
   }
 
   // autolock
-  public static Command hubLock(Drive drive, Vision vision){
-    return Commands.run(() ->);
+  public static Command hubLock(Drive drive) {
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    Pose3d hubCoord;
+    hubCoord = ally.get() == Alliance.Red ? layout.getTagPose(0).get() : layout.getTagPose(0).get();
+    return Commands.run(
+        () ->
+            drive.runVelocity(
+                new ChassisSpeeds(0, 0, hubCoord.toPose2d().getRotation().getRadians())),
+        drive);
   }
- 
-  
 }

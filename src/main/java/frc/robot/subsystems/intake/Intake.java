@@ -12,7 +12,6 @@ public class Intake extends SubsystemBase {
 
   private IntakeIO io;
 
-  private boolean intakeToggle = true;
   private double setpoint;
 
   public Intake(IntakeIO io) {
@@ -21,7 +20,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    io.updateInputs(inputs);
+    io.updateInputs(inputs, setpoint);
     Logger.processInputs("Intake", inputs);
   }
 
@@ -34,19 +33,20 @@ public class Intake extends SubsystemBase {
   }
 
   public void toggleIntake() {
-    if (!intakeToggle) {
-      io.turnIntakeMotorAngle(INTAKE_DOWN_ANGLE);
-    } else {
+    if (setpoint >= ((INTAKE_UP_ANGLE - INTAKE_DOWN_ANGLE) / 2)) {
       io.turnIntakeMotorAngle(INTAKE_UP_ANGLE);
+    } else {
+      io.turnIntakeMotorAngle(INTAKE_DOWN_ANGLE);
     }
-    intakeToggle = !intakeToggle;
   }
 
   public void incrementIntake() {
-    io.turnIntakeMotorAngle(++setpoint);
+    setpoint += 5;
+    io.turnIntakeMotorAngle(setpoint);
   }
 
   public void decrementIntake() {
-    io.turnIntakeMotorAngle(--setpoint);
+    setpoint -= 5;
+    io.turnIntakeMotorAngle(setpoint);
   }
 }

@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -117,6 +118,12 @@ public class RobotContainer {
     }
 
     // Set up auto routines
+    NamedCommands.registerCommand(
+        "RunLauncher", LauncherCommands.runLauncher(launcher).withTimeout(8));
+    NamedCommands.registerCommand("RunIntake", IntakeCommands.runIntake(intake).withTimeout(10));
+    NamedCommands.registerCommand("ToggleIntake", IntakeCommands.toggleIntake(intake));
+    NamedCommands.registerCommand("Wait", Commands.waitSeconds(2));
+
     autoChooser =
         new LoggedDashboardChooser<>(
             "Auto Choices",
@@ -186,15 +193,22 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // OPERATOR CONTROLLER
-    operatorController.leftTrigger().whileTrue(LauncherCommands.runLauncher(launcher));
+    operatorController.rightTrigger().whileTrue(LauncherCommands.runLauncher(launcher));
+    operatorController.leftBumper().whileTrue(IntakeCommands.runIntake(intake));
     // operatorController.rightTrigger().whileTrue(HopperCommands.runHopper(hopper));
-    operatorController.b().whileTrue(HopperCommands.runHopper(hopper));
-    operatorController.x().whileTrue(HopperCommands.runIndexer(hopper));
-    operatorController.a().whileTrue(IntakeCommands.runIntake(intake));
+    operatorController.x().whileTrue(HopperCommands.runHopper(hopper));
+    operatorController.y().whileTrue(HopperCommands.runIndexer(hopper));
+    /*  operatorController
+    .a()
+    .whileTrue(HopperCommands.runIndexer(hopper).alongWith(HopperCommands.runHopper(hopper)));
 
-    operatorController.leftBumper().whileTrue(IntakeCommands.incrementIntake(intake));
-    operatorController.rightBumper().whileTrue(IntakeCommands.decrementIntake(intake));
+    */
+    operatorController.rightBumper().onTrue(IntakeCommands.toggleIntake(intake));
+    operatorController.pov(0).whileTrue(IntakeCommands.incrementIntake(intake));
+    operatorController.pov(180).whileTrue(IntakeCommands.decrementIntake(intake));
+
     // TODO: add intake stuff and shit
+
   }
 
   /**

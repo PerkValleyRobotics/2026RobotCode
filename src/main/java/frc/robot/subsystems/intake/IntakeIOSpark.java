@@ -64,30 +64,27 @@ public class IntakeIOSpark implements IntakeIO {
     turnConf
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .p(INTAKE_TURN_MOTOR_kP)
-        .i(INTAKE_TURN_MOTOR_kI)
-        .d(INTAKE_TURN_MOTOR_kD);
+        .pid(INTAKE_TURN_MOTOR_kP, INTAKE_TURN_MOTOR_kI, INTAKE_TURN_MOTOR_kD);
 
-    // optionally switch direction here
-    SparkMaxConfig followConf = new SparkMaxConfig();
+    /*SparkMaxConfig followConf = new SparkMaxConfig();
 
-    followConf
-        .idleMode(IdleMode.kBrake)
-        .smartCurrentLimit(TURNING_MOTOR_MAX_AMPERAGE)
-        .voltageCompensation(12.0)
-        .inverted(true)
-        .follow(INTAKE_LEFT_TURN_MOTOR_ID);
-    followConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
-    //
-    tryUntilOk(
-        rightTurnMotor,
-        5,
-        () ->
-            rightTurnMotor.configure(
-                turnConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        followConf
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(TURNING_MOTOR_MAX_AMPERAGE)
+            .voltageCompensation(12.0)
+            .inverted(true)
+            .follow(INTAKE_LEFT_TURN_MOTOR_ID);
+        followConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
+        //
+        tryUntilOk(
+            rightTurnMotor,
+            5,
+            () ->
+                rightTurnMotor.configure(
+                    followConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
-    tryUntilOk(rightTurnMotor, 5, () -> rightTurnEncoder.setPosition(0));
-
+        tryUntilOk(rightTurnMotor, 5, () -> rightTurnEncoder.setPosition(0));
+    */
     SparkMaxConfig runConf = new SparkMaxConfig();
 
     runConf
@@ -107,7 +104,7 @@ public class IntakeIOSpark implements IntakeIO {
   }
 
   @Override
-  public void updateInputs(IntakeIOInputs inputs) {
+  public void updateInputs(IntakeIOInputs inputs, double setpoint) {
     boolean sparkStickyFault = false;
 
     inputs.intakeMotorConnected = runDebounce.calculate(!sparkStickyFault);
@@ -151,6 +148,8 @@ public class IntakeIOSpark implements IntakeIO {
         rightTurnMotor,
         rightTurnMotor::getOutputCurrent,
         (value) -> inputs.turnRightIntakeMotorCurrentAmps = value);
+
+    inputs.setpoint = setpoint;
   }
 
   public void setIntakeSpeed(double speed) {
