@@ -3,7 +3,8 @@ package frc.robot.subsystems.launcher;
 import edu.wpi.first.math.system.plant.DCMotor;
 
 public class LauncherConstants {
-  public static final int SHOOTING_MOTOR_ID = 40;
+  public static final int LEFT_SHOOTING_MOTOR_ID = 40;
+  public static final int RIGHT_SHOOTING_MOTOR_ID = 42;
   public static final int TURNING_MOTOR_ID = 41;
 
   public static final int SHOOTING_MOTOR_MAX_AMPERAGE = 40;
@@ -17,7 +18,7 @@ public class LauncherConstants {
   public static final double SHOOTER_TEMP_HARD_LIMIT = 100;
 
   // turn PID
-  public static final double TURN_MOTOR_kP = 0;
+  public static final double TURN_MOTOR_kP = 0.5;
   public static final double TURN_MOTOR_kI = 0;
   public static final double TURN_MOTOR_kD = 0;
   public static final double TURN_MOTOR_kFF = 0;

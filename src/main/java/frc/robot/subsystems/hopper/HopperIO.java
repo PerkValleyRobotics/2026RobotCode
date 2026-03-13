@@ -21,4 +21,8 @@ public interface HopperIO {
   public default void setHopperSpeed(double speed) {}
 
   public default void setIndexerSpeed(double speed) {}
+
+  public default boolean motorIsOverTemp() {
+    return false;
+  }
 }

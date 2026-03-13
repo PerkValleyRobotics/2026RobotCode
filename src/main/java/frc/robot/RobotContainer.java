@@ -189,10 +189,11 @@ public class RobotContainer {
     operatorController.leftTrigger().whileTrue(LauncherCommands.runLauncher(launcher));
     // operatorController.rightTrigger().whileTrue(HopperCommands.runHopper(hopper));
     operatorController.b().whileTrue(HopperCommands.runHopper(hopper));
+    operatorController.x().whileTrue(HopperCommands.runIndexer(hopper));
     operatorController.a().whileTrue(IntakeCommands.runIntake(intake));
 
     operatorController.leftBumper().whileTrue(IntakeCommands.incrementIntake(intake));
-    operatorController.rightBumper().whileTrue(IntakeCommands.incrementIntake(intake));
+    operatorController.rightBumper().whileTrue(IntakeCommands.decrementIntake(intake));
     // TODO: add intake stuff and shit
   }
 

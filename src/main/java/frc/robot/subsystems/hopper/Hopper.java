@@ -19,11 +19,16 @@ public class Hopper extends SubsystemBase {
   public void runHopper(double speed) {
     io.setHopperSpeed(speed);
   }
-  public void runIndexer(double speed){
+
+  public void runIndexer(double speed) {
     io.setIndexerSpeed(speed);
   }
 
   public void stopHopper() {
     io.setHopperSpeed(0);
+  }
+
+  public void stopIndexer() {
+    io.setIndexerSpeed(0);
   }
 }

@@ -23,7 +23,9 @@ import frc.robot.util.Elastic.Notification;
 import java.util.function.DoubleSupplier;
 
 public class LauncherIOSpark implements LauncherIO {
-  private final SparkBase shootingMotor;
+  private final SparkBase leftShootingMotor;
+  private final SparkBase rightShootingMotor;
+
   private final SparkBase turningMotor;
   private final RelativeEncoder shootingEncoder;
   private final RelativeEncoder turningEncoder;
@@ -34,15 +36,17 @@ public class LauncherIOSpark implements LauncherIO {
   private SparkClosedLoopController turningController;
 
   public LauncherIOSpark() {
-    shootingMotor = new SparkFlex(SHOOTING_MOTOR_ID, MotorType.kBrushless);
+    leftShootingMotor = new SparkFlex(LEFT_SHOOTING_MOTOR_ID, MotorType.kBrushless);
+    rightShootingMotor = new SparkFlex(RIGHT_SHOOTING_MOTOR_ID, MotorType.kBrushless);
     turningMotor = new SparkFlex(TURNING_MOTOR_ID, MotorType.kBrushless);
 
-    shootingEncoder = shootingMotor.getEncoder();
+    shootingEncoder = leftShootingMotor.getEncoder();
     turningEncoder = turningMotor.getEncoder();
 
     turningController = turningMotor.getClosedLoopController();
 
     SparkBaseConfig shooterConf = new SparkFlexConfig();
+    SparkBaseConfig followerConf = new SparkFlexConfig();
     SparkBaseConfig turnConf = new SparkMaxConfig();
 
     shooterConf
@@ -53,19 +57,35 @@ public class LauncherIOSpark implements LauncherIO {
     shooterConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
 
     tryUntilOk(
-        shootingMotor,
+        leftShootingMotor,
         5,
         () ->
-            shootingMotor.configure(
+            leftShootingMotor.configure(
                 shooterConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
-    tryUntilOk(shootingMotor, 5, () -> shootingEncoder.setPosition(0));
+    tryUntilOk(leftShootingMotor, 5, () -> shootingEncoder.setPosition(0));
+
+    followerConf
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(SHOOTING_MOTOR_MAX_AMPERAGE)
+        .voltageCompensation(12.0)
+        .inverted(true);
+    followerConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
+
+    tryUntilOk(
+        rightShootingMotor,
+        5,
+        () ->
+            rightShootingMotor.configure(
+                followerConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+
+    tryUntilOk(rightShootingMotor, 5, () -> shootingEncoder.setPosition(0));
 
     turnConf
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(TURNING_MOTOR_MAX_AMPERAGE)
         .voltageCompensation(12.0)
-        .inverted(false);
+        .inverted(true);
     turnConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
     turnConf
         .closedLoop
@@ -91,19 +111,21 @@ public class LauncherIOSpark implements LauncherIO {
     inputs.shootingMotorConnected = shootDebounce.calculate(!sparkStickyFault);
 
     ifOk(
-        shootingMotor,
+        leftShootingMotor,
         shootingEncoder::getVelocity,
         (value) -> {
           inputs.shootingMotorSpeedRadsPerSecond = value;
           inputs.shooterReady = value >= SHOOTER_TARGET_SPEED_RADS;
         });
     ifOk(
-        shootingMotor,
-        new DoubleSupplier[] {shootingMotor::getBusVoltage, shootingMotor::getAppliedOutput},
+        leftShootingMotor,
+        new DoubleSupplier[] {
+          leftShootingMotor::getBusVoltage, leftShootingMotor::getAppliedOutput
+        },
         (value) -> inputs.shootingMotorAppliedVolts = value[0] * value[1]);
     ifOk(
-        shootingMotor,
-        shootingMotor::getOutputCurrent,
+        leftShootingMotor,
+        leftShootingMotor::getOutputCurrent,
         (value) -> inputs.shootingMotorCurrentAmps = value);
 
     inputs.turningMotorConnected = turnDebounce.calculate(!sparkStickyFault);
@@ -124,7 +146,8 @@ public class LauncherIOSpark implements LauncherIO {
 
   @Override
   public void setShooterSpeed(double speed) {
-    shootingMotor.set(speed);
+    leftShootingMotor.set(speed);
+    rightShootingMotor.set(speed);
   }
 
   public void turnHoodAngle(double angleDegrees) {
@@ -132,7 +155,7 @@ public class LauncherIOSpark implements LauncherIO {
   }
 
   public void launcherWarning() {
-    if (shootingMotor.getMotorTemperature() >= SHOOTER_TEMP_HARD_LIMIT) {
+    if (leftShootingMotor.getMotorTemperature() >= SHOOTER_TEMP_HARD_LIMIT) {
       Elastic.sendNotification(
           new Notification()
               .withLevel(Elastic.NotificationLevel.WARNING)

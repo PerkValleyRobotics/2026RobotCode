@@ -110,6 +110,7 @@ public class HopperIOSpark implements HopperIO {
     indexerMotor.set(speed);
   }
 
+  @Override
   public boolean motorIsOverTemp() {
     return hopperMotor.getMotorTemperature() >= HOPPER_TEMPERATURE_HARD_STOP;
   }

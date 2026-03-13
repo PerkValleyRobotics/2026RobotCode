@@ -47,7 +47,7 @@ public class IntakeIOSpark implements IntakeIO {
     SparkMaxConfig turnConf = new SparkMaxConfig();
 
     turnConf
-        .idleMode(IdleMode.kCoast)
+        .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(TURNING_MOTOR_MAX_AMPERAGE)
         .voltageCompensation(12.0)
         .inverted(false);
@@ -72,7 +72,7 @@ public class IntakeIOSpark implements IntakeIO {
     SparkMaxConfig followConf = new SparkMaxConfig();
 
     followConf
-        .idleMode(IdleMode.kCoast)
+        .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(TURNING_MOTOR_MAX_AMPERAGE)
         .voltageCompensation(12.0)
         .inverted(true)

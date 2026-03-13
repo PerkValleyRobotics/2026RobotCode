@@ -4,16 +4,35 @@
 
 package frc.robot.commands;
 
+import static frc.robot.subsystems.hopper.HopperConstants.HOPPER_NORMAL_SPEED;
+import static frc.robot.subsystems.hopper.HopperConstants.INDEXER_NORMAL_SPEED;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.hopper.Hopper;
 
 public class HopperCommands {
   public static Command runHopper(Hopper hopper) {
-    return Commands.runOnce(
-        () -> {
-          hopper.runHopper(1);
-        },
-        hopper);
+    return Commands.run(
+            () -> {
+              hopper.runHopper(HOPPER_NORMAL_SPEED);
+            },
+            hopper)
+        .finallyDo(
+            () -> {
+              hopper.stopHopper();
+            });
+  }
+
+  public static Command runIndexer(Hopper hopper) {
+    return Commands.run(
+            () -> {
+              hopper.runIndexer(INDEXER_NORMAL_SPEED);
+            },
+            hopper)
+        .finallyDo(
+            () -> {
+              hopper.stopIndexer();
+            });
   }
 }
