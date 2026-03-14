@@ -52,6 +52,12 @@ public class IntakeIOSpark implements IntakeIO {
         .voltageCompensation(12.0)
         .inverted(false);
     turnConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
+
+    turnConf
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .pid(INTAKE_TURN_MOTOR_kP, INTAKE_TURN_MOTOR_kI, INTAKE_TURN_MOTOR_kD);
+
     tryUntilOk(
         leftTurnMotor,
         5,
@@ -60,11 +66,6 @@ public class IntakeIOSpark implements IntakeIO {
                 turnConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(leftTurnMotor, 5, () -> leftTurnEncoder.setPosition(0));
-
-    turnConf
-        .closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .pid(INTAKE_TURN_MOTOR_kP, INTAKE_TURN_MOTOR_kI, INTAKE_TURN_MOTOR_kD);
 
     SparkMaxConfig followConf = new SparkMaxConfig();
 
@@ -75,7 +76,7 @@ public class IntakeIOSpark implements IntakeIO {
         .inverted(true)
         .follow(INTAKE_LEFT_TURN_MOTOR_ID);
     followConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
-    //
+    
     tryUntilOk(
         rightTurnMotor,
         5,
