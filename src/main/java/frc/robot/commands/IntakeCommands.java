@@ -25,6 +25,18 @@ public class IntakeCommands {
             });
   }
 
+public static Command runIntakeReverse(Intake intake) {
+    return Commands.run(
+            () -> {
+              intake.runIntake(-1);
+            },
+            intake)
+        .finallyDo(
+            () -> {
+              intake.runIntake(0);
+            });
+  }
+
   public static Command incrementIntake(Intake intake) {
     return Commands.runOnce(
         () -> {

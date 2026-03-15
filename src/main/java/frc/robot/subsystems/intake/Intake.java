@@ -3,7 +3,11 @@ package frc.robot.subsystems.intake;
 import static frc.robot.subsystems.intake.IntakeIOConstants.INTAKE_DOWN_ANGLE;
 import static frc.robot.subsystems.intake.IntakeIOConstants.INTAKE_UP_ANGLE;
 
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -11,6 +15,9 @@ public class Intake extends SubsystemBase {
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
   private IntakeIO io;
+
+  private LinearSystem<N1,N1,N1> intakeArm;
+  private SysIdRoutine sysid;
 
   private double setpoint;
 
@@ -33,7 +40,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void toggleIntake() {
-    if (setpoint >= ((INTAKE_UP_ANGLE - INTAKE_DOWN_ANGLE) / 2)) {
+    if (setpoint >= ((Math.abs(INTAKE_UP_ANGLE - INTAKE_DOWN_ANGLE)) / 2)) {
       io.turnIntakeMotorAngle(INTAKE_UP_ANGLE);
     } else {
       io.turnIntakeMotorAngle(INTAKE_DOWN_ANGLE);

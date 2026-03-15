@@ -27,4 +27,6 @@ public interface LauncherIO {
   public default void turnHoodAngle(double angleDegrees) {}
 
   public default void launcherWarning() {}
+
+  public default void setVoltage(double voltage){}
 }

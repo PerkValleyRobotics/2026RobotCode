@@ -17,6 +17,12 @@ public class LauncherConstants {
   public static final double SHOOTER_TARGET_SPEED_RADS = 3100;
   public static final double SHOOTER_TEMP_HARD_LIMIT = 100;
 
+  // flywheel contants
+  public static final double SHOOT_MOTOR_kP = 0.5;
+  public static final double SHOOT_MOTOR_kI = 0;
+  public static final double SHOOT_MOTOR_kD = 0;
+  public static final double SHOOT_MOTOR_kFF = 0;
+
   // turn PID
   public static final double TURN_MOTOR_kP = 0.5;
   public static final double TURN_MOTOR_kI = 0;

@@ -35,4 +35,16 @@ public class HopperCommands {
               hopper.stopIndexer();
             });
   }
+
+  public static Command runIndexerReverse(Hopper hopper) {
+    return Commands.run(
+            () -> {
+              hopper.runIndexer(-INDEXER_NORMAL_SPEED);
+            },
+            hopper)
+        .finallyDo(
+            () -> {
+              hopper.stopIndexer();
+            });
+  }
 }

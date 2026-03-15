@@ -6,7 +6,12 @@ package frc.robot.subsystems.launcher;
 
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_ANGLE_MIN_LIMIT;
 
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.trajectoryCalc.LauncherTrajectoryCalc;
 import org.littletonrobotics.junction.Logger;
 
@@ -14,6 +19,10 @@ public class Launcher extends SubsystemBase {
   private LauncherIO io;
   private LauncherTrajectoryCalc trajectoryCalculator;
   private final LauncherIOInputsAutoLogged inputs = new LauncherIOInputsAutoLogged();
+  private LinearSystem<N3,N2,N2> flywheel;
+  private LinearSystem<N2,N2,N2> hood;
+  private SysIdRoutine sysId;
+
 
   double setpoint;
 
@@ -33,6 +42,7 @@ public class Launcher extends SubsystemBase {
   public void runLauncher(double speed) {
     io.setShooterSpeed(speed);
   }
+
 
   public void stopLauncher() {
     io.setShooterSpeed(0);
