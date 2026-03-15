@@ -10,11 +10,11 @@ public class LauncherConstants {
   public static final int SHOOTING_MOTOR_MAX_AMPERAGE = 40;
   public static final int TURNING_MOTOR_MAX_AMPERAGE = 40;
 
-  public static final double SHOOTING_MOTOR_SPEED = 0.8;
+  public static final double SHOOTING_MOTOR_SPEED = 0.725; // 0.8, 80;
   public static final double HOOD_ANGLE_MAX_LIMIT = 90;
   public static final double HOOD_ANGLE_MIN_LIMIT = 0;
 
-  public static final double SHOOTER_TARGET_SPEED_RADS = 3000;
+  public static final double SHOOTER_TARGET_SPEED_RADS = 3100;
   public static final double SHOOTER_TEMP_HARD_LIMIT = 100;
 
   // turn PID

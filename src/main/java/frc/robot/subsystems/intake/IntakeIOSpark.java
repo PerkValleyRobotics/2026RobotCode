@@ -73,10 +73,9 @@ public class IntakeIOSpark implements IntakeIO {
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(TURNING_MOTOR_MAX_AMPERAGE)
         .voltageCompensation(12.0)
-        .inverted(true)
-        .follow(INTAKE_LEFT_TURN_MOTOR_ID);
+        .follow(INTAKE_LEFT_TURN_MOTOR_ID, true);
     followConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
-    
+
     tryUntilOk(
         rightTurnMotor,
         5,

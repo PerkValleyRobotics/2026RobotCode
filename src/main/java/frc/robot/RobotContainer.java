@@ -21,6 +21,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
+import frc.robot.commands.AutonCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -79,8 +80,7 @@ public class RobotContainer {
         hopper = new Hopper(new HopperIOSpark());
         vision =
             new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOLimelight("limelight_0", drive::getRotation));
+                drive::addVisionMeasurement, new VisionIOLimelight("camera_0", drive::getRotation));
 
         break;
 
@@ -118,11 +118,9 @@ public class RobotContainer {
     }
 
     // Set up auto routines
-    NamedCommands.registerCommand(
-        "RunLauncher", LauncherCommands.runLauncher(launcher).withTimeout(8));
     NamedCommands.registerCommand("RunIntake", IntakeCommands.runIntake(intake).withTimeout(10));
     NamedCommands.registerCommand("ToggleIntake", IntakeCommands.toggleIntake(intake));
-    NamedCommands.registerCommand("Wait", Commands.waitSeconds(2));
+    NamedCommands.registerCommand("shoot", new AutonCommands(launcher, hopper));
 
     autoChooser =
         new LoggedDashboardChooser<>(

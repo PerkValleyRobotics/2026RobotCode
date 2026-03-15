@@ -18,4 +18,11 @@ public class LauncherCommands {
               launcher.stopLauncher();
             });
   }
+
+  public static Command startLauncher(Launcher launcher) {
+    return Commands.run(
+        () -> {
+          launcher.runLauncher(SHOOTING_MOTOR_SPEED);
+        });
+  }
 }

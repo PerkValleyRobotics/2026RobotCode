@@ -41,12 +41,12 @@ public class Intake extends SubsystemBase {
   }
 
   public void incrementIntake() {
-    setpoint += 5;
+    setpoint += 2;
     io.turnIntakeMotorAngle(setpoint);
   }
 
   public void decrementIntake() {
-    setpoint -= 5;
+    setpoint -= 2;
     io.turnIntakeMotorAngle(setpoint);
   }
 }

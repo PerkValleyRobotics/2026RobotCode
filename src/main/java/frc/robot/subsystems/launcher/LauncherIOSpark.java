@@ -69,7 +69,8 @@ public class LauncherIOSpark implements LauncherIO {
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(SHOOTING_MOTOR_MAX_AMPERAGE)
         .voltageCompensation(12.0)
-        .inverted(true);
+        .follow(LEFT_SHOOTING_MOTOR_ID, true);
+
     followerConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
 
     tryUntilOk(
@@ -147,7 +148,6 @@ public class LauncherIOSpark implements LauncherIO {
   @Override
   public void setShooterSpeed(double speed) {
     leftShootingMotor.set(speed);
-    rightShootingMotor.set(speed);
   }
 
   public void turnHoodAngle(double angleDegrees) {
