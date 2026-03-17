@@ -55,8 +55,7 @@ public class IntakeIOSpark implements IntakeIO {
 
     turnConf
         .closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .pid(INTAKE_TURN_MOTOR_kP, INTAKE_TURN_MOTOR_kI, INTAKE_TURN_MOTOR_kD);
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
     tryUntilOk(
         leftTurnMotor,
