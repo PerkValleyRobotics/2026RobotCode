@@ -40,9 +40,13 @@ public class Launcher extends SubsystemBase {
   private final LinearSystem<N2, N1, N2> hood;
 
   /* kalman filters and lqrs for filtering and managing control rules */
-  private final KalmanFilter observFilter;
-  private final LinearQuadraticRegulator controller;
-  private LinearSystemLoop loop;
+  private final KalmanFilter<N1, N1, N1> flywheelObservFilter;
+  private final LinearQuadraticRegulator<N1, N1, N1> flywheelController;
+  private final LinearSystemLoop<N1, N1, N1> flywheelControlLoop;
+
+  private final KalmanFilter<N2, N1, N2> hoodObservFilter;
+  private final LinearQuadraticRegulator<N2, N1, N2> hoodController;
+  private final LinearSystemLoop<N2, N1, N2> hoodControlLoop;
 
   // use depending on conditions of the calculated parameters
   private SysIdRoutine sysIdFlywheel;
@@ -60,21 +64,31 @@ public class Launcher extends SubsystemBase {
     // this.sysId = new SysIdRoutine(, null))
 
     // filter and kqr
-    this.observFilter = new KalmanFilter<>(Nat.N1(), Nat.N1(), flywheel, VecBuilder.fill(3), VecBuilder.fill(0.03),
+    this.flywheelObservFilter = new KalmanFilter<>(Nat.N1(), Nat.N1(), flywheel, VecBuilder.fill(3),
+        VecBuilder.fill(0.03),
         0.02);
+    this.hoodObservFilter = new KalmanFilter<>(Nat.N2(), Nat.N2(), hood, VecBuilder.fill(3, 3),
+        VecBuilder.fill(0.03, 0.03), 0.02);
 
-    this.controller = new LinearQuadraticRegulator<>(
-          flywheel,
-          VecBuilder.fill(8.0), // qelms. Velocity error tolerance, in radians per second. Decrease
-          // this to more heavily penalize state excursion, or make the controller behave more
-          // aggressively.
-          VecBuilder.fill(12.0), // relms. Control effort (voltage) tolerance. Decrease this to more
-          // heavily penalize control effort, or make the controller less aggressive. 12 is a good
-          // starting point because that is the (approximate) maximum voltage of a battery.
-          0.020); // Nominal time between loops. 0.020 for TimedRobot, but can be
-  // lower if using notifiers.
+    this.flywheelController = new LinearQuadraticRegulator<>(
+        flywheel,
+        VecBuilder.fill(8.0), // qelms. Velocity error tolerance, in radians per second. Decrease
+        // this to more heavily penalize state excursion, or make the controller behave
+        // more
+        // aggressively.
+        VecBuilder.fill(12.0), // relms. Control effort (voltage) tolerance. Decrease this to more
+        // heavily penalize control effort, or make the controller less aggressive. 12
+        // is a good
+        // starting point because that is the (approximate) maximum voltage of a
+        // battery.
+        0.020); // Nominal time between loops. 0.020 for TimedRobot, but can be
+    // lower if using notifiers.
 
+    this.hoodController = new LinearQuadraticRegulator<>(hood, VecBuilder.fill(8, 8), VecBuilder.fill(12.0), 0.020);
 
+    this.flywheelControlLoop = new LinearSystemLoop<N1, N1, N1>(flywheel, flywheelController, flywheelObservFilter,
+        12.0, 0.020);
+    this.hoodControlLoop = new LinearSystemLoop<N2, N1, N2>(hood, hoodController, hoodObservFilter, 12.0, 0.020);
 
   }
 
