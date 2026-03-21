@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutonCommands;
-import frc.robot.commands.DriveAndRotateToPointCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
@@ -117,7 +114,8 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementation
-        drive=    new Drive(
+        drive =
+            new Drive(
                 new GyroIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
@@ -129,7 +127,6 @@ public class RobotContainer {
 
         vision = null;
         break;
-    
     }
 
     // Set up auto routines
@@ -191,7 +188,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -232,8 +229,10 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // vision stufffff :):)
-    driveController.y().whileTrue(new DriveAndRotateToPointCommand().create(drive, driveController::getLeftY, driveController::getLeftX));
-    
+    driveController
+        .y()
+        .whileTrue(
+            DriveCommands.hubLock(drive, driveController::getLeftY, driveController::getLeftX));
 
     // OPERATOR CONTROLLER
     operatorController.rightTrigger().whileTrue(LauncherCommands.runLauncher(launcher));
@@ -265,7 +264,6 @@ public class RobotContainer {
     // TODO: add intake stuff and shit
 
   }
-  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

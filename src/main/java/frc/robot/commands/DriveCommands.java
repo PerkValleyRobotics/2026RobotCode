@@ -7,13 +7,10 @@
 
 package frc.robot.commands;
 
-import static frc.robot.FieldConstants.layout;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -31,7 +28,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -312,15 +308,19 @@ public class DriveCommands {
         .finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
   }
 
-  // autolock
-  public static Command hubLock(Drive drive) {
-    Optional<Alliance> ally = DriverStation.getAlliance();
-    Pose3d hubCoord;
-    hubCoord = ally.get() == Alliance.Red ? layout.getTagPose(0).get() : layout.getTagPose(0).get();
-    return Commands.run(
-        () ->
-            drive.runVelocity(
-                new ChassisSpeeds(0, 0, hubCoord.toPose2d().getRotation().getRadians())),
-        drive);
+  public static Command hubLock(Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
+    Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
+    double targetX = alliance == Alliance.Red ? 4.537 : 11.879;
+    double targetY = 4.035;
+
+    // Rotation supplier that always points toward the target point
+    java.util.function.Supplier<Rotation2d> rotationSupplier =
+        () -> {
+          Pose2d robotPose = drive.getPose();
+          double angleToTarget = Math.atan2(targetY - robotPose.getY(), targetX - robotPose.getX());
+          return new Rotation2d(angleToTarget);
+        };
+
+    return DriveCommands.joystickDriveAtAngle(drive, xSupplier, ySupplier, rotationSupplier);
   }
 }
