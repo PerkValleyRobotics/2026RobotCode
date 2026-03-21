@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.filter.Debouncer;
 import java.util.function.DoubleSupplier;
 
@@ -32,7 +33,7 @@ public class HopperIOSpark implements HopperIO {
     indexerMotor = new SparkFlex(INDEXER_MOTOR_ID, MotorType.kBrushless);
     indexerEncoder = indexerMotor.getEncoder();
 
-    SparkFlexConfig HopperConf = new SparkFlexConfig();
+    SparkMaxConfig HopperConf = new SparkMaxConfig();
     HopperConf.idleMode(IdleMode.kCoast)
         .smartCurrentLimit(HOPPER_MAX_AMPERAGE)
         .voltageCompensation(12.0)

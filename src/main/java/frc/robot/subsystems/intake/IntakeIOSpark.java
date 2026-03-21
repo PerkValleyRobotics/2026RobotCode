@@ -51,9 +51,14 @@ public class IntakeIOSpark implements IntakeIO {
         .smartCurrentLimit(TURNING_MOTOR_MAX_AMPERAGE)
         .voltageCompensation(12.0)
         .inverted(false);
-    turnConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
 
-    turnConf.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    turnConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
+    turnConf
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .p(INTAKE_TURN_MOTOR_kP)
+        .i(INTAKE_TURN_MOTOR_kI)
+        .d(INTAKE_TURN_MOTOR_kD);
 
     tryUntilOk(
         leftTurnMotor,
