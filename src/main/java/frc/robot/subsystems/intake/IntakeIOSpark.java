@@ -53,9 +53,7 @@ public class IntakeIOSpark implements IntakeIO {
         .inverted(false);
     turnConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
 
-    turnConf
-        .closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    turnConf.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
     tryUntilOk(
         leftTurnMotor,

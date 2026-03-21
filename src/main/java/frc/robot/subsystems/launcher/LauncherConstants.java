@@ -33,6 +33,23 @@ public class LauncherConstants {
   public static DCMotor shootingSimMotor = DCMotor.getNEO(1);
   public static DCMotor turningSimMotor = DCMotor.getNEO(1);
 
+  // StateSpace Variables
+  public static final double STATE_SPACE_CYCLE_DT = 0.02;
+
+  // Launcher StateSpace Variables
+  public static final double FLYWHEEL_QELMS = 8.00; // Velocity Error Tolerance (Rad/S)
+  public static final double FLYWHEEL_RELMS = 12.00; // Voltage Control Effort (Volts)
+  public static final double FLYWHEEL_CONFIDENCE_VALUE = 3; // confidence in our statespace model
+  public static final double FLYWHEEL_ENCODER_CONFIDENCE =
+      0.03; // confidence in our input (encoder)
+
+  // Hood StateSpace Variables
+  public static final double HOOD_QELMS =
+      8.00; // Position and Velocity Error Tolerance (May need two parameters)
+  public static final double HOOD_RELMS = 12.00; // Voltage Control Effort (Volts)
+  public static final double HOOD_CONFIDENCE_VALUE = 3; // confidence in our statespace model
+  public static final double HOOD_ENCODER_CONFIDENCE = 0.03; // confidence in our input (encoder)
+
   public static final double TURN_MOTOR_SIM_kP = 0;
   public static final double TURN_MOTOR_SIM_kI = 0;
   public static final double TURN_MOTOR_SIM_kD = 0;

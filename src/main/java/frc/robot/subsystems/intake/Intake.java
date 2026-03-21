@@ -3,11 +3,7 @@ package frc.robot.subsystems.intake;
 import static frc.robot.subsystems.intake.IntakeIOConstants.INTAKE_DOWN_ANGLE;
 import static frc.robot.subsystems.intake.IntakeIOConstants.INTAKE_UP_ANGLE;
 
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -16,8 +12,8 @@ public class Intake extends SubsystemBase {
 
   private IntakeIO io;
 
-  private LinearSystem<N1,N1,N1> intakeArm;
-  private SysIdRoutine sysid;
+  // private LinearSystem<N1, N1, N1> intakeArm;
+  // private SysIdRoutine sysid;
 
   private double setpoint;
 

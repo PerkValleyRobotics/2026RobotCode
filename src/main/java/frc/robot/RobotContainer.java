@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -50,9 +52,18 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // Subsystems
+  private final Drive drive;
+  private final Launcher launcher;
+  private final Intake intake;
+  private final Hopper hopper;
+  private final Vision vision;
   // Subsystems
   private final Drive drive;
   private final Launcher launcher;
@@ -63,7 +74,12 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  // Controller
+  private final CommandXboxController driveController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
+  // Dashboard inputs
+  private final LoggedDashboardChooser<Command> autoChooser;
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -87,6 +103,7 @@ public class RobotContainer {
                 drive::addVisionMeasurement, new VisionIOLimelight("camera_0", drive::getRotation));
 
         break;
+        break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
@@ -109,7 +126,20 @@ public class RobotContainer {
                     () -> drive.getPose()));
 
         break;
+        break;
 
+      default:
+        // Replayed robot, disable IO implementations
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
+        launcher = new Launcher(new LauncherIO() {});
+        intake = new Intake(new IntakeIO() {});
+        hopper = new Hopper(new HopperIO() {});
       default:
         // Replayed robot, disable IO implementations
         drive =
@@ -126,12 +156,27 @@ public class RobotContainer {
         vision = null;
         break;
     }
+        vision = null;
+        break;
+    }
 
     // Set up auto routines
     NamedCommands.registerCommand("RunIntake", IntakeCommands.runIntake(intake).withTimeout(10));
     NamedCommands.registerCommand("ToggleIntake", IntakeCommands.toggleIntake(intake));
     NamedCommands.registerCommand("shoot", new AutonCommands(launcher, hopper));
+    // Set up auto routines
+    NamedCommands.registerCommand("RunIntake", IntakeCommands.runIntake(intake).withTimeout(10));
+    NamedCommands.registerCommand("ToggleIntake", IntakeCommands.toggleIntake(intake));
+    NamedCommands.registerCommand("shoot", new AutonCommands(launcher, hopper));
 
+    autoChooser =
+        new LoggedDashboardChooser<>(
+            "Auto Choices",
+            AutoBuilder.buildAutoChooserWithOptionsModifier(
+                (stream) ->
+                    Constants.COMPETITION_MODE
+                        ? stream.filter(auto -> auto.getName().startsWith("(comp)"))
+                        : stream));
     autoChooser =
         new LoggedDashboardChooser<>(
             "Auto Choices",
@@ -156,11 +201,43 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    // Set up SysId routines
+    autoChooser.addOption(
+        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+    autoChooser.addOption(
+        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+    autoChooser.addOption(
+        "Drive SysId (Quasistatic Forward)",
+        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption(
+        "Drive SysId (Quasistatic Reverse)",
+        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption(
+        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption(
+        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureButtonBindings();
   }
+    // Configure the button bindings
+    configureButtonBindings();
+  }
 
+  /**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureButtonBindings() {
+    // Default command, normal field-relative drive
+    drive.setDefaultCommand(
+        DriveCommands.joystickDrive(
+            drive,
+            () -> driveController.getLeftY(),
+            () -> driveController.getLeftX(),
+            () -> driveController.getRightX()));
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -185,10 +262,31 @@ public class RobotContainer {
                 () -> driveController.getLeftY(),
                 () -> driveController.getLeftX(),
                 () -> Rotation2d.kZero));
+    // Lock to 0° when A button is held
+    driveController
+        .a()
+        .whileTrue(
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> driveController.getLeftY(),
+                () -> driveController.getLeftX(),
+                () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
     driveController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // Switch to X pattern when X button is pressed
+    driveController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
+    // Reset gyro to 0° when B button is pressed
+    driveController
+        .b()
+        .onTrue(
+            Commands.runOnce(
+                    () ->
+                        drive.setPose(
+                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
+                    drive)
+                .ignoringDisable(true));
     // Reset gyro to 0° when B button is pressed
     driveController
         .b()
@@ -223,11 +321,31 @@ public class RobotContainer {
     operatorController.rightBumper().onTrue(IntakeCommands.toggleIntake(intake));
     operatorController.pov(0).whileTrue(IntakeCommands.incrementIntake(intake));
     operatorController.pov(180).whileTrue(IntakeCommands.decrementIntake(intake));
+    /*
+     * operatorController
+     * .a()
+     * .whileTrue(HopperCommands.runIndexer(hopper).alongWith(HopperCommands.
+     * runHopper(hopper)));
+     *
+     */
+    operatorController.rightBumper().onTrue(IntakeCommands.toggleIntake(intake));
+    operatorController.pov(0).whileTrue(IntakeCommands.incrementIntake(intake));
+    operatorController.pov(180).whileTrue(IntakeCommands.decrementIntake(intake));
 
+    // TODO: add intake stuff and shit
     // TODO: add intake stuff and shit
 
   }
+  }
 
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return autoChooser.get();
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
