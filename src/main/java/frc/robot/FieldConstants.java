@@ -26,6 +26,7 @@ public class FieldConstants {
   public static final int RED_HUB_LEFT_BOTTOM = 10;
   public static final int RED_HUB_RIGHT_TOP = 4;
   public static final int RED_HUB_RIGHT_BOTTOM = 3;
+  public static final double RED_HUB_TRIANGULATED_X = 4.537;
 
   public static final int BLUE_HUB_TOP_CENTER = 18;
   public static final int BLUE_HUB_TOP_OFFSET = 27;
@@ -35,6 +36,9 @@ public class FieldConstants {
   public static final int BLUE_HUB_LEFT_BOTTOM = 20;
   public static final int BLUE_HUB_RIGHT_TOP = 26;
   public static final int BLUE_HUB_RIGHT_BOTTOM = 25;
+  public static final double BLUE_HUB_TRIANGULATED_X = 11.879;
+
+  public static final double HUB_TRIANGULATED_Y = 4.035;
 
   public static final int RED_TOWER_WALL_TOP = 16;
   public static final int RED_TOWER_WALL_BOTTOM = 15;
