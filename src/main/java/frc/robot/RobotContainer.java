@@ -64,22 +64,11 @@ public class RobotContainer {
   private final Intake intake;
   private final Hopper hopper;
   private final Vision vision;
-  // Subsystems
-  private final Drive drive;
-  private final Launcher launcher;
-  private final Intake intake;
-  private final Hopper hopper;
-  private final Vision vision;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
-  // Controller
-  private final CommandXboxController driveController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
 
-  // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -103,7 +92,6 @@ public class RobotContainer {
                 drive::addVisionMeasurement, new VisionIOLimelight("camera_0", drive::getRotation));
 
         break;
-        break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
@@ -126,24 +114,10 @@ public class RobotContainer {
                     () -> drive.getPose()));
 
         break;
-        break;
 
       default:
-        // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
-        launcher = new Launcher(new LauncherIO() {});
-        intake = new Intake(new IntakeIO() {});
-        hopper = new Hopper(new HopperIO() {});
-      default:
-        // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
+        // Replayed robot, disable IO implementation
+        drive=    new Drive(
                 new GyroIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
@@ -155,9 +129,7 @@ public class RobotContainer {
 
         vision = null;
         break;
-    }
-        vision = null;
-        break;
+    
     }
 
     // Set up auto routines
@@ -169,14 +141,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("ToggleIntake", IntakeCommands.toggleIntake(intake));
     NamedCommands.registerCommand("shoot", new AutonCommands(launcher, hopper));
 
-    autoChooser =
-        new LoggedDashboardChooser<>(
-            "Auto Choices",
-            AutoBuilder.buildAutoChooserWithOptionsModifier(
-                (stream) ->
-                    Constants.COMPETITION_MODE
-                        ? stream.filter(auto -> auto.getName().startsWith("(comp)"))
-                        : stream));
     autoChooser =
         new LoggedDashboardChooser<>(
             "Auto Choices",
@@ -220,9 +184,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
   }
-    // Configure the button bindings
-    configureButtonBindings();
-  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -230,14 +191,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
-    // Default command, normal field-relative drive
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> driveController.getLeftY(),
-            () -> driveController.getLeftX(),
-            () -> driveController.getRightX()));
+  
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -262,31 +216,10 @@ public class RobotContainer {
                 () -> driveController.getLeftY(),
                 () -> driveController.getLeftX(),
                 () -> Rotation2d.kZero));
-    // Lock to 0° when A button is held
-    driveController
-        .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> driveController.getLeftY(),
-                () -> driveController.getLeftX(),
-                () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
     driveController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    // Switch to X pattern when X button is pressed
-    driveController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    // Reset gyro to 0° when B button is pressed
-    driveController
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
-                .ignoringDisable(true));
     // Reset gyro to 0° when B button is pressed
     driveController
         .b()
@@ -328,24 +261,12 @@ public class RobotContainer {
      * runHopper(hopper)));
      *
      */
-    operatorController.rightBumper().onTrue(IntakeCommands.toggleIntake(intake));
-    operatorController.pov(0).whileTrue(IntakeCommands.incrementIntake(intake));
-    operatorController.pov(180).whileTrue(IntakeCommands.decrementIntake(intake));
 
     // TODO: add intake stuff and shit
-    // TODO: add intake stuff and shit
 
   }
-  }
+  
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoChooser.get();
-  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
