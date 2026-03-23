@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.*;
 // still fastest solution
 // note to self make freshman do algebra labor for phun
 
-public class RawKinematics implements LauncherTrajectoryCalc {
+public class XOnlyApproximation implements LauncherTrajectoryCalc {
 
   public static double calculate(inputParameters initialParameters) {
     Translation2d Target = DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? new Translation2d(RED_HUB_TRIANGULATED_X, HUB_TRIANGULATED_Y) : new Translation2d(BLUE_HUB_TRIANGULATED_X, HUB_TRIANGULATED_Y);
