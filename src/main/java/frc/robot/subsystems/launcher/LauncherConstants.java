@@ -42,14 +42,13 @@ public class LauncherConstants {
   public static final double FLYWHEEL_QELMS = 8.00; // Velocity Error Tolerance (Rad/S)
   public static final double FLYWHEEL_RELMS = 12.00; // Voltage Control Effort (Volts)
   public static final double FLYWHEEL_CONFIDENCE_VALUE = 3; // confidence in our statespace model
-  public static final double FLYWHEEL_ENCODER_CONFIDENCE =
-      0.03; // confidence in our input (encoder)
+  public static final double FLYWHEEL_ENCODER_CONFIDENCE = 0.03; // confidence in our input (encoder)
 
   // Hood StateSpace Variables
   public static final int HOOD_GEARING = 1;
   public static final double HOOD_MOI_KGM = 1;
   public static final double HOOD_QELMS = 8.0;
-   // Position and Velocity Error Tolerance (May need two parameters)
+  // Position and Velocity Error Tolerance (May need two parameters)
   public static final double HOOD_RELMS = 12.00; // Voltage Control Effort (Volts)
   public static final double HOOD_CONFIDENCE_VALUE = 3; // confidence in our statespace model
   public static final double HOOD_ENCODER_CONFIDENCE = 0.03; // confidence in our input (encoder)

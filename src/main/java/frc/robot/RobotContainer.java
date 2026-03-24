@@ -138,10 +138,10 @@ public class RobotContainer {
                 });
                 hopper = new Hopper(new HopperIO() {
                 });
-
-                vision = null;
+ll;
                 break;
         }
+                vision = nu
 
         // Set up auto routines
         NamedCommands.registerCommand("RunIntake", IntakeCommands.runIntake(intake).withTimeout(10));

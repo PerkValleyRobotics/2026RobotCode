@@ -18,7 +18,7 @@ public class XOnlyApproximation implements LauncherTrajectoryCalc {
     Target.plus(initialParameters.velocityVectors());
     double targetAngle = 0;
     try{
-    targetAngle =  0.5 * Math.asin(Target.getDistance(initialParameters.currentPose().getTranslation())*9.8)/Math.pow(initialParameters.launchVelocity(),2);
+    targetAngle =  0.5 * Math.asin(Target.getDistance(initialParameters.currentPose().getTranslation())*9.81)/Math.pow(initialParameters.launchVelocity(),2);
 }
 finally{targetAngle = 0;}
 

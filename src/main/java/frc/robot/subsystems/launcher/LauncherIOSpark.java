@@ -60,9 +60,8 @@ public class LauncherIOSpark implements LauncherIO {
     tryUntilOk(
         leftShootingMotor,
         5,
-        () ->
-            leftShootingMotor.configure(
-                shooterConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> leftShootingMotor.configure(
+            shooterConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(leftShootingMotor, 5, () -> shootingEncoder.setPosition(0));
 
@@ -77,9 +76,8 @@ public class LauncherIOSpark implements LauncherIO {
     tryUntilOk(
         rightShootingMotor,
         5,
-        () ->
-            rightShootingMotor.configure(
-                followerConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> rightShootingMotor.configure(
+            followerConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(rightShootingMotor, 5, () -> shootingEncoder.setPosition(0));
 
@@ -89,8 +87,7 @@ public class LauncherIOSpark implements LauncherIO {
         .voltageCompensation(12.0)
         .inverted(true);
     turnConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
-    turnConf
-        .closedLoop
+    turnConf.closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(TURN_MOTOR_kP)
         .i(TURN_MOTOR_kI)
@@ -99,9 +96,8 @@ public class LauncherIOSpark implements LauncherIO {
     tryUntilOk(
         turningMotor,
         5,
-        () ->
-            turningMotor.configure(
-                turnConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> turningMotor.configure(
+            turnConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(turningMotor, 5, () -> turningEncoder.setPosition(0));
   }
@@ -122,7 +118,7 @@ public class LauncherIOSpark implements LauncherIO {
     ifOk(
         leftShootingMotor,
         new DoubleSupplier[] {
-          leftShootingMotor::getBusVoltage, leftShootingMotor::getAppliedOutput
+            leftShootingMotor::getBusVoltage, leftShootingMotor::getAppliedOutput
         },
         (value) -> inputs.shootingMotorAppliedVolts = value[0] * value[1]);
     ifOk(
@@ -138,7 +134,7 @@ public class LauncherIOSpark implements LauncherIO {
         (value) -> inputs.turningMotorPositionDeg = value);
     ifOk(
         turningMotor,
-        new DoubleSupplier[] {turningMotor::getBusVoltage, turningMotor::getAppliedOutput},
+        new DoubleSupplier[] { turningMotor::getBusVoltage, turningMotor::getAppliedOutput },
         (value) -> inputs.turningMotorAppliedVolts = value[0] * value[1]);
     ifOk(
         turningMotor,
@@ -151,8 +147,8 @@ public class LauncherIOSpark implements LauncherIO {
     leftShootingMotor.set(speed);
   }
 
-  public void turnHoodAngle(double angleDegrees) {
-    turningController.setSetpoint(angleDegrees, ControlType.kPosition);
+  public void turnHoodAngle(double setpoint) {
+    turningController.setSetpoint(setpoint, ControlType.kPosition);
   }
 
   public void launcherWarning() {
@@ -166,13 +162,12 @@ public class LauncherIOSpark implements LauncherIO {
     }
   }
 
-  public void setVoltage(double voltage){
-	  leftShootingMotor.setVoltage(voltage);
+  public void setVoltage(double voltage) {
+    leftShootingMotor.setVoltage(voltage);
   }
 
-  public double getVelocityRadsPerSec(){
-	  return Units.rotationsPerMinuteToRadiansPerSecond(shootingEncoder.getVelocity());
-
+  public double getVelocityRadsPerSec() {
+    return Units.rotationsPerMinuteToRadiansPerSecond(shootingEncoder.getVelocity());
 
   }
 
