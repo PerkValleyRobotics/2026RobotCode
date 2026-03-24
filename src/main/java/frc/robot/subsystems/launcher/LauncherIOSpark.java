@@ -21,6 +21,7 @@ import edu.wpi.first.math.filter.Debouncer;
 import frc.robot.util.Elastic;
 import frc.robot.util.Elastic.Notification;
 import java.util.function.DoubleSupplier;
+import edu.wpi.first.math.util.Units;
 
 public class LauncherIOSpark implements LauncherIO {
   private final SparkBase leftShootingMotor;
@@ -164,4 +165,15 @@ public class LauncherIOSpark implements LauncherIO {
               .withDisplaySeconds(8.0));
     }
   }
+
+  public void setVoltage(double voltage){
+	  leftShootingMotor.setVoltage(voltage);
+  }
+
+  public double getVelocityRadsPerSec(){
+	  return Units.rotationsPerMinuteToRadiansPerSecond(shootingEncoder.getVelocity());
+
+
+  }
+
 }

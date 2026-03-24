@@ -103,8 +103,14 @@ public class Launcher extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    io.launcherWarning();
     Logger.processInputs("Launcher", inputs);
+
+    // state space update
+    this.flywheelControlLoop.correct(VecBuilder.fill(io.getVelocityRadsPerSec()));
+
+    this.flywheelControlLoop.predict(STATE_SPACE_CYCLE_DT);
+    double nextVoltage = flywheelControlLoop.getU(0);
+    //io.setVoltage(nextVoltage);
   }
 
   // actual functions for launcher
@@ -129,4 +135,11 @@ public class Launcher extends SubsystemBase {
     this.setpoint = HOOD_ANGLE_MIN_LIMIT;
     io.turnHoodAngle(setpoint);
   }
+
+
+  // STATE SPACE METHODS
+  public void setLauncherStateReferencePoint(double speed){
+    this.flywheelControlLoop.setNextR(VecBuilder.fill(speed));
+  }
+
 }

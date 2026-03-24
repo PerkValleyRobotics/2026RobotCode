@@ -29,4 +29,6 @@ public interface LauncherIO {
   public default void launcherWarning() {}
 
   public default void setVoltage(double voltage) {}
+
+  public default double getVelocityRadsPerSec() { return 0;}
 }
