@@ -11,10 +11,14 @@ import static frc.robot.subsystems.launcher.LauncherConstants.FLYWHEEL_RELMS;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_ANGLE_MAX_LIMIT;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_ANGLE_MIN_LIMIT;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_GEARING;
+import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_MAX_SETPOINT;
+import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_MIN_SETPOINT;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_MOI_KGM;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_QELMS;
 import static frc.robot.subsystems.launcher.LauncherConstants.STATE_SPACE_CYCLE_DT;
 import static frc.robot.subsystems.launcher.LauncherConstants.turningSimMotor;
+
+import java.util.Optional;
 
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -129,24 +133,25 @@ public class Launcher extends SubsystemBase {
     io.setShooterSpeed(0);
   }
 
-  public void turnHoodAngle(double angleDegrees) {
-    this.setpoint = angleDegrees;
-    io.turnHoodAngle(setpoint);
+  public void turnHoodSetpoint(double setpoint) {
+    this.setpoint = setpoint;
+    io.setHoodAngleSetpoint(setpoint);
   }
 
-  public void incrementHoodAngle() {
-    io.turnHoodAngle(++this.setpoint);
+  public void incrementHoodSetpoint() {
+    io.setHoodAngleSetpoint(++this.setpoint);
   }
 
-  public void resetHoodAngle(double angleDegrees) {
+  public void resetHoodSetpoint(double setpoint) {
     this.setpoint = HOOD_ANGLE_MIN_LIMIT;
-    io.turnHoodAngle(setpoint);
+    io.setHoodAngleSetpoint(setpoint);
   }
 
   public void calculateAndSetTrajectoryAngle(inputParameters inputs) {
-    // AngleSupplier angle = new
-    // AngleSupplier(trajectoryCalculator.calculate(inputs), null);
-
+    AngleSupplier angle = new AngleSupplier(trajectoryCalculator.calculate(inputs),
+        new AngleRange(HOOD_ANGLE_MIN_LIMIT, HOOD_ANGLE_MAX_LIMIT),
+        Optional.of(new AngleRange(HOOD_MIN_SETPOINT, HOOD_MAX_SETPOINT)));
+    turnHoodSetpoint(angle.getRemappedAngleAsDouble());
   }
 
   // STATE SPACE METHODS

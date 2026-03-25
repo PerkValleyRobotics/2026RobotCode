@@ -65,9 +65,8 @@ public class LauncherIOSpark implements LauncherIO {
     tryUntilOk(
         topLeftShootingMotor,
         5,
-        () ->
-            topLeftShootingMotor.configure(
-                mainShooterConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> topLeftShootingMotor.configure(
+            mainShooterConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(topLeftShootingMotor, 5, () -> shootingEncoder.setPosition(0));
 
@@ -76,9 +75,8 @@ public class LauncherIOSpark implements LauncherIO {
     tryUntilOk(
         topRightShootingMotor,
         5,
-        () ->
-            topRightShootingMotor.configure(
-                mainShooterConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> topRightShootingMotor.configure(
+            mainShooterConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(topRightShootingMotor, 5, () -> shootingEncoder.setPosition(0));
 
@@ -95,9 +93,8 @@ public class LauncherIOSpark implements LauncherIO {
     tryUntilOk(
         bottomLeftShootingMotor,
         5,
-        () ->
-            bottomLeftShootingMotor.configure(
-                followerConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> bottomLeftShootingMotor.configure(
+            followerConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(bottomLeftShootingMotor, 5, () -> shootingEncoder.setPosition(0));
 
@@ -107,9 +104,8 @@ public class LauncherIOSpark implements LauncherIO {
     tryUntilOk(
         bottomRightShootingMotor,
         5,
-        () ->
-            bottomRightShootingMotor.configure(
-                followerConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> bottomRightShootingMotor.configure(
+            followerConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(bottomRightShootingMotor, 5, () -> shootingEncoder.setPosition(0));
 
@@ -119,8 +115,7 @@ public class LauncherIOSpark implements LauncherIO {
         .voltageCompensation(12.0)
         .inverted(true);
     turnConf.encoder.uvwMeasurementPeriod(10).uvwAverageDepth(2);
-    turnConf
-        .closedLoop
+    turnConf.closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(TURN_MOTOR_kP)
         .i(TURN_MOTOR_kI)
@@ -129,9 +124,8 @@ public class LauncherIOSpark implements LauncherIO {
     tryUntilOk(
         turningMotor,
         5,
-        () ->
-            turningMotor.configure(
-                turnConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> turningMotor.configure(
+            turnConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     tryUntilOk(turningMotor, 5, () -> turningEncoder.setPosition(0));
   }
@@ -152,7 +146,7 @@ public class LauncherIOSpark implements LauncherIO {
     ifOk(
         topLeftShootingMotor,
         new DoubleSupplier[] {
-          topLeftShootingMotor::getBusVoltage, topLeftShootingMotor::getAppliedOutput
+            topLeftShootingMotor::getBusVoltage, topLeftShootingMotor::getAppliedOutput
         },
         (value) -> inputs.shootingMotorAppliedVolts = value[0] * value[1]);
     ifOk(
@@ -168,7 +162,7 @@ public class LauncherIOSpark implements LauncherIO {
         (value) -> inputs.turningMotorPositionDeg = value);
     ifOk(
         turningMotor,
-        new DoubleSupplier[] {turningMotor::getBusVoltage, turningMotor::getAppliedOutput},
+        new DoubleSupplier[] { turningMotor::getBusVoltage, turningMotor::getAppliedOutput },
         (value) -> inputs.turningMotorAppliedVolts = value[0] * value[1]);
     ifOk(
         turningMotor,
@@ -182,7 +176,7 @@ public class LauncherIOSpark implements LauncherIO {
     topRightShootingMotor.set(-speed);
   }
 
-  public void turnHoodAngle(double setpoint) {
+  public void setHoodAngleSetpoint(double setpoint) {
     turningController.setSetpoint(setpoint, ControlType.kPosition);
   }
 

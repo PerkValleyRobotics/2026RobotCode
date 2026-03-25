@@ -16,9 +16,6 @@ public class LauncherConstants {
   public static final int TURNING_MOTOR_MAX_AMPERAGE = 40;
 
   public static final double SHOOTING_MOTOR_SPEED = 0.3625; // 0.8, 80;
-  public static final double HOOD_ANGLE_MAX_LIMIT = 90;
-  public static final double HOOD_ANGLE_MIN_LIMIT = 0;
-
   public static final double SHOOTER_TARGET_SPEED_RADS = 3100;
   public static final double SHOOTER_TEMP_HARD_LIMIT = 100;
 
@@ -47,8 +44,7 @@ public class LauncherConstants {
   public static final double FLYWHEEL_QELMS = 8.00; // Velocity Error Tolerance (Rad/S)
   public static final double FLYWHEEL_RELMS = 12.00; // Voltage Control Effort (Volts)
   public static final double FLYWHEEL_CONFIDENCE_VALUE = 3; // confidence in our statespace model
-  public static final double FLYWHEEL_ENCODER_CONFIDENCE =
-      0.03; // confidence in our input (encoder)
+  public static final double FLYWHEEL_ENCODER_CONFIDENCE = 0.03; // confidence in our input (encoder)
 
   // Hood StateSpace Variables
   public static final int HOOD_GEARING = 1;
@@ -65,4 +61,9 @@ public class LauncherConstants {
   public static final double TURN_MOTOR_SIM_kFF = 0;
 
   public static final double LAUNCHER_HEIGHT = Units.inchesToMeters(18);
+  public static final double HOOD_ANGLE_MAX_LIMIT = 90;
+  public static final double HOOD_ANGLE_MIN_LIMIT = 0;
+  public static final double HOOD_MAX_SETPOINT = 1;
+  public static final double HOOD_MIN_SETPOINT = 0;
+
 }
