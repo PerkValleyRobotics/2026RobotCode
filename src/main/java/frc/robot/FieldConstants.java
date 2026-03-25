@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.util.Units;
 
 public class FieldConstants {
   public static final AprilTagFields FIELD_VERSION = AprilTagFields.k2026RebuiltAndymark;
@@ -39,7 +40,7 @@ public class FieldConstants {
   public static final double BLUE_HUB_TRIANGULATED_X = 11.879;
 
   public static final double HUB_TRIANGULATED_Y = 4.035;
-  public static final double HUB_TRIANGULATED_Z = 4.035;
+  public static final double HUB_TRIANGULATED_Z = Units.inchesToMeters(72);
 
   public static final int RED_TOWER_WALL_TOP = 16;
   public static final int RED_TOWER_WALL_BOTTOM = 15;

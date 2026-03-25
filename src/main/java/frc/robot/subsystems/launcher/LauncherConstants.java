@@ -1,16 +1,21 @@
 package frc.robot.subsystems.launcher;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 
 public class LauncherConstants {
-  public static final int LEFT_SHOOTING_MOTOR_ID = 40;
-  public static final int RIGHT_SHOOTING_MOTOR_ID = 42;
+  public static final int TOP_LEFT_SHOOTING_MOTOR_ID = 40;
+  public static final int BOTTOM_LEFT_SHOOTING_MOTOR_ID = 44;
+
+  public static final int TOP_RIGHT_SHOOTING_MOTOR_ID = 42;
+  public static final int BOTTOM_RIGHT_SHOOTING_MOTOR_ID = 43;
+
   public static final int TURNING_MOTOR_ID = 41;
 
   public static final int SHOOTING_MOTOR_MAX_AMPERAGE = 40;
   public static final int TURNING_MOTOR_MAX_AMPERAGE = 40;
 
-  public static final double SHOOTING_MOTOR_SPEED = 0.725; // 0.8, 80;
+  public static final double SHOOTING_MOTOR_SPEED = 0.3625; // 0.8, 80;
   public static final double HOOD_ANGLE_MAX_LIMIT = 90;
   public static final double HOOD_ANGLE_MIN_LIMIT = 0;
 
@@ -42,7 +47,8 @@ public class LauncherConstants {
   public static final double FLYWHEEL_QELMS = 8.00; // Velocity Error Tolerance (Rad/S)
   public static final double FLYWHEEL_RELMS = 12.00; // Voltage Control Effort (Volts)
   public static final double FLYWHEEL_CONFIDENCE_VALUE = 3; // confidence in our statespace model
-  public static final double FLYWHEEL_ENCODER_CONFIDENCE = 0.03; // confidence in our input (encoder)
+  public static final double FLYWHEEL_ENCODER_CONFIDENCE =
+      0.03; // confidence in our input (encoder)
 
   // Hood StateSpace Variables
   public static final int HOOD_GEARING = 1;
@@ -57,4 +63,6 @@ public class LauncherConstants {
   public static final double TURN_MOTOR_SIM_kI = 0;
   public static final double TURN_MOTOR_SIM_kD = 0;
   public static final double TURN_MOTOR_SIM_kFF = 0;
+
+  public static final double LAUNCHER_HEIGHT = Units.inchesToMeters(18);
 }

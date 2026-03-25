@@ -1,7 +1,5 @@
 package frc.robot.subsystems.trajectoryCalc;
 
-// quadratic solution finder with drag coefficient
+// quadratic solution finder
 
-public class TrueKinematics implements LauncherTrajectoryCalc {
-    
-}
+public class TrueKinematics implements LauncherTrajectoryCalc {}

@@ -12,36 +12,36 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.hopper.Hopper;
 
 public class HopperCommands {
-  public static Command runHopper(Hopper hopper) {
+  public static Command runHopperCommand(Hopper hopper) {
     return Commands.run(
-            () -> {
-              hopper.runHopper(HOPPER_NORMAL_SPEED);
-            },
-            hopper)
+        () -> {
+          hopper.runHopper(HOPPER_NORMAL_SPEED);
+        },
+        hopper)
         .finallyDo(
             () -> {
               hopper.stopHopper();
             });
   }
 
-  public static Command runIndexer(Hopper hopper) {
+  public static Command runIndexerCommand(Hopper hopper) {
     return Commands.run(
-            () -> {
-              hopper.runIndexer(INDEXER_NORMAL_SPEED);
-            },
-            hopper)
+        () -> {
+          hopper.runIndexer(INDEXER_NORMAL_SPEED);
+        },
+        hopper)
         .finallyDo(
             () -> {
               hopper.stopIndexer();
             });
   }
 
-  public static Command runIndexerReverse(Hopper hopper) {
+  public static Command runIndexerReverseCommand(Hopper hopper) {
     return Commands.run(
-            () -> {
-              hopper.runIndexer(-INDEXER_NORMAL_SPEED);
-            },
-            hopper)
+        () -> {
+          hopper.runIndexer(-INDEXER_NORMAL_SPEED);
+        },
+        hopper)
         .finallyDo(
             () -> {
               hopper.stopIndexer();

@@ -8,6 +8,7 @@ import static frc.robot.subsystems.launcher.LauncherConstants.FLYWHEEL_GEARING;
 import static frc.robot.subsystems.launcher.LauncherConstants.FLYWHEEL_MOI_KGM;
 import static frc.robot.subsystems.launcher.LauncherConstants.FLYWHEEL_QELMS;
 import static frc.robot.subsystems.launcher.LauncherConstants.FLYWHEEL_RELMS;
+import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_ANGLE_MAX_LIMIT;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_ANGLE_MIN_LIMIT;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_GEARING;
 import static frc.robot.subsystems.launcher.LauncherConstants.HOOD_MOI_KGM;
@@ -27,6 +28,10 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.trajectoryCalc.LauncherTrajectoryCalc;
+import frc.robot.subsystems.trajectoryCalc.LauncherTrajectoryCalc.inputParameters;
+import frc.robot.util.AngleSupplier;
+import frc.robot.util.AngleSupplier.AngleRange;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Launcher extends SubsystemBase {
@@ -91,13 +96,15 @@ public class Launcher extends SubsystemBase {
         0.020); // Nominal time between loops. 0.020 for TimedRobot, but can be
     // lower if using notifiers.
 
-    this.hoodController = new LinearQuadraticRegulator<>(hood, VecBuilder.fill(HOOD_QELMS, HOOD_QELMS),
-        VecBuilder.fill(12.0), STATE_SPACE_CYCLE_DT);
+    this.hoodController = new LinearQuadraticRegulator<>(
+        hood,
+        VecBuilder.fill(HOOD_QELMS, HOOD_QELMS),
+        VecBuilder.fill(12.0),
+        STATE_SPACE_CYCLE_DT);
 
     this.flywheelControlLoop = new LinearSystemLoop<N1, N1, N1>(
         flywheel, flywheelController, flywheelObservFilter, 12.0, 0.020);
     this.hoodControlLoop = new LinearSystemLoop<N2, N1, N2>(hood, hoodController, hoodObservFilter, 12.0, 0.020);
-
   }
 
   @Override
@@ -110,12 +117,9 @@ public class Launcher extends SubsystemBase {
 
     this.flywheelControlLoop.predict(STATE_SPACE_CYCLE_DT);
     double nextVoltage = flywheelControlLoop.getU(0);
-    //io.setVoltage(nextVoltage);
+    // io.setVoltage(nextVoltage);
   }
 
-  
-  
-  
   // actual functions for launcher
   public void runLauncher(double speed) {
     io.setShooterSpeed(speed);
@@ -139,10 +143,14 @@ public class Launcher extends SubsystemBase {
     io.turnHoodAngle(setpoint);
   }
 
+  public void calculateAndSetTrajectoryAngle(inputParameters inputs) {
+    // AngleSupplier angle = new
+    // AngleSupplier(trajectoryCalculator.calculate(inputs), null);
 
-  // STATE SPACE METHODS
-  public void setLauncherStateReferencePoint(double speed){
-    this.flywheelControlLoop.setNextR(VecBuilder.fill(speed));
   }
 
+  // STATE SPACE METHODS
+  public void setLauncherStateReferencePoint(double speed) {
+    this.flywheelControlLoop.setNextR(VecBuilder.fill(speed));
+  }
 }

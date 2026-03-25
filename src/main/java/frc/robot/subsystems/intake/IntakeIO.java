@@ -7,11 +7,12 @@ public interface IntakeIO {
   public static class IntakeIOInputs {
     boolean intakeMotorConnected = false;
     double setpoint = 0.0;
-    double intakeMotorSpeedRadsPerSecond = 0.0;
+    double intakeMotorSpeedRPM = 0.0;
     double intakeMotorAppliedVolts = 0.0;
     double intakeMotorCurrentAmps = 0.0;
 
-    double turnIntakeMotorPositionDeg = 0.0;
+    double turnIntakeAbsoluteRotations = 0.0;
+    double turnIntakeSetpoint = 0.0;
 
     boolean turnLeftIntakeMotorConnected = false;
     double turnLeftIntakeMotorAppliedVolts = 0.0;
@@ -22,9 +23,12 @@ public interface IntakeIO {
     double turnRightIntakeMotorCurrentAmps = 0.0;
   }
 
-  public default void updateInputs(IntakeIOInputs inputs, double setpoint) {}
+  public default void updateInputs(IntakeIOInputs inputs) {
+  }
 
-  public default void setIntakeSpeed(double speed) {}
+  public default void setIntakeSpeed(double speed) {
+  }
 
-  public default void turnIntakeMotorAngle(double degrees) {}
+  public default void turnIntakeMotorAngle(double degrees) {
+  }
 }

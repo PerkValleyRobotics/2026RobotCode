@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.intake.Intake;
 
 public class IntakeCommands {
-  public static Command toggleIntake(Intake intake) {
+  public static Command toggleIntakeCommand(Intake intake) {
     return Commands.runOnce(
         () -> {
           intake.toggleIntake();
@@ -13,31 +13,31 @@ public class IntakeCommands {
         intake);
   }
 
-  public static Command runIntake(Intake intake) {
+  public static Command runIntakeCommand(Intake intake) {
     return Commands.run(
-            () -> {
-              intake.runIntake(0.9625);
-            },
-            intake)
+        () -> {
+          intake.runIntake(0.9625);
+        },
+        intake)
         .finallyDo(
             () -> {
               intake.runIntake(0);
             });
   }
 
-  public static Command runIntakeReverse(Intake intake) {
+  public static Command runIntakeReverseCommand(Intake intake) {
     return Commands.run(
-            () -> {
-              intake.runIntake(-1);
-            },
-            intake)
+        () -> {
+          intake.runIntake(-1);
+        },
+        intake)
         .finallyDo(
             () -> {
               intake.runIntake(0);
             });
   }
 
-  public static Command incrementIntake(Intake intake) {
+  public static Command incrementIntakeCommand(Intake intake) {
     return Commands.runOnce(
         () -> {
           intake.incrementIntake();
@@ -45,7 +45,7 @@ public class IntakeCommands {
         intake);
   }
 
-  public static Command decrementIntake(Intake intake) {
+  public static Command decrementIntakeCommand(Intake intake) {
     return Commands.runOnce(
         () -> {
           intake.decrementIntake();
