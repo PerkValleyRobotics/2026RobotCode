@@ -15,10 +15,10 @@ public class IntakeCommands {
 
   public static Command runIntakeCommand(Intake intake) {
     return Commands.run(
-        () -> {
-          intake.runIntake(0.9625);
-        },
-        intake)
+            () -> {
+              intake.runIntake(0.9625);
+            },
+            intake)
         .finallyDo(
             () -> {
               intake.runIntake(0);
@@ -27,10 +27,10 @@ public class IntakeCommands {
 
   public static Command runIntakeReverseCommand(Intake intake) {
     return Commands.run(
-        () -> {
-          intake.runIntake(-1);
-        },
-        intake)
+            () -> {
+              intake.runIntake(-1);
+            },
+            intake)
         .finallyDo(
             () -> {
               intake.runIntake(0);

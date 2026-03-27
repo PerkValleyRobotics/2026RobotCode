@@ -23,12 +23,9 @@ public interface IntakeIO {
     double turnRightIntakeMotorCurrentAmps = 0.0;
   }
 
-  public default void updateInputs(IntakeIOInputs inputs) {
-  }
+  public default void updateInputs(IntakeIOInputs inputs) {}
 
-  public default void setIntakeSpeed(double speed) {
-  }
+  public default void setIntakeSpeed(double speed) {}
 
-  public default void turnIntakeMotorAngle(double degrees) {
-  }
+  public default void turnIntakeMotorAngle(double degrees) {}
 }

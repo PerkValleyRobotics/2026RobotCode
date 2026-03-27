@@ -12,10 +12,10 @@ import frc.robot.subsystems.trajectoryCalc.LauncherTrajectoryCalc.inputParameter
 public class LauncherCommands {
   public static Command runLauncherCommand(Launcher launcher) {
     return Commands.run(
-        () -> {
-          launcher.runLauncher(SHOOTING_MOTOR_SPEED);
-        },
-        launcher)
+            () -> {
+              launcher.runLauncher(SHOOTING_MOTOR_SPEED);
+            },
+            launcher)
         .finallyDo(
             () -> {
               launcher.stopLauncher();
@@ -30,9 +30,10 @@ public class LauncherCommands {
   }
 
   public static Command lockTrajectoryCommand(Launcher launcher, Drive drive) {
-    return Commands.run(() -> {
-      launcher.calculateAndSetTrajectoryAngle(
-          new inputParameters(1, drive.getPose(), new Translation2d(0, 0)));
-    });
+    return Commands.runOnce(
+        () -> {
+          launcher.calculateAndSetTrajectoryAngle(
+              new inputParameters(7.5, drive.getPose(), new Translation2d(0, 0)));
+        });
   }
 }

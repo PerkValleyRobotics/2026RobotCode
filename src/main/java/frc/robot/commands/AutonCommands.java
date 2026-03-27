@@ -11,8 +11,10 @@ import frc.robot.subsystems.launcher.Launcher;
 
 public class AutonCommands {
   public static Command AutonomousLaunchCommand(Launcher launcher, Hopper hopper) {
-    return Commands.sequence(LauncherCommands.startLauncherCommand(launcher), Commands.waitSeconds(4),
-        HopperCommands.runHopperCommand(hopper), HopperCommands.runIndexerCommand(hopper));
-
+    return Commands.sequence(
+        LauncherCommands.startLauncherCommand(launcher),
+        Commands.waitSeconds(4),
+        HopperCommands.runHopperCommand(hopper),
+        HopperCommands.runIndexerCommand(hopper));
   }
 }

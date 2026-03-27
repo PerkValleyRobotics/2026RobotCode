@@ -9,6 +9,6 @@ public class HopperConstants {
 
   public static final double HOPPER_TEMPERATURE_HARD_STOP = 100000000;
   public static final double HOPPER_NORMAL_SPEED = 0.8;
-  public static final double INDEXER_NORMAL_SPEED = 0.9;
+  public static final double INDEXER_NORMAL_SPEED = 0.2;
   public static final double HOPPER_OVERHEAT_SPEED = 0.1;
 }

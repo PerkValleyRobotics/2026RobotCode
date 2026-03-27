@@ -20,20 +20,15 @@ public interface LauncherIO {
     boolean shooterReady = false;
   }
 
-  public default void updateInputs(LauncherIOInputs inputs) {
-  }
+  public default void updateInputs(LauncherIOInputs inputs) {}
 
-  public default void setShooterSpeed(double speed) {
-  }
+  public default void setShooterSpeed(double speed) {}
 
-  public default void setHoodAngleSetpoint(double setpoint) {
-  }
+  public default void setHoodAngleSetpoint(double setpoint) {}
 
-  public default void launcherWarning() {
-  }
+  public default void launcherWarning() {}
 
-  public default void setVoltage(double voltage) {
-  }
+  public default void setVoltage(double voltage) {}
 
   public default double getVelocityRadsPerSec() {
     return 0;

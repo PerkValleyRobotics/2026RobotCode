@@ -1,8 +1,10 @@
 package frc.robot.subsystems.trajectoryCalc;
 
 import static frc.robot.FieldConstants.*;
+import static frc.robot.subsystems.trajectoryCalc.TrajectoriesConstants.G;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.*;
 
 // raw calculations done using highschool physics
@@ -20,13 +22,15 @@ public class XOnlyApproximation implements LauncherTrajectoryCalc {
             : new Translation2d(BLUE_HUB_TRIANGULATED_X, HUB_TRIANGULATED_Y);
     Target.plus(inputs.velocityVectors());
     double targetAngle = 0;
-    try {
-      targetAngle =
-          0.5
-              * Math.asin(
-                  Target.getDistance(inputs.currentPose().getTranslation()) * 9.81)
-              / Math.pow(inputs.launchVelocity(), 2);
-    } finally {
+    targetAngle =
+        0.5
+            * Units.radiansToDegrees(
+                Math.asin(
+                    Target.getDistance(inputs.currentPose().getTranslation())
+                        * G
+                        / Math.pow(inputs.launchVelocity(), 2)));
+
+    if (Double.isNaN(targetAngle)) {
       targetAngle = 0;
     }
 

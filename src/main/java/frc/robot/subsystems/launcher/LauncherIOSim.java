@@ -18,16 +18,19 @@ public class LauncherIOSim implements LauncherIO {
   private double turningAppliedVolts = 0.0;
 
   public LauncherIOSim() {
-    shootingMotor = new DCMotorSim(
-        LinearSystemId.createDCMotorSystem(shootingSimMotor, 1, 1), shootingSimMotor);
-    turningMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem(turningSimMotor, 1, 1), turningSimMotor);
+    shootingMotor =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(shootingSimMotor, 1, 1), shootingSimMotor);
+    turningMotor =
+        new DCMotorSim(LinearSystemId.createDCMotorSystem(turningSimMotor, 1, 1), turningSimMotor);
     turnController.enableContinuousInput(HOOD_ANGLE_MIN_LIMIT, HOOD_ANGLE_MAX_LIMIT);
   }
 
   @Override
   public void updateInputs(LauncherIOInputs inputs) {
     if (!setTurningOpenLoop) {
-      turningAppliedVolts = turningFFVolts + turnController.calculate(turningMotor.getAngularPositionRad());
+      turningAppliedVolts =
+          turningFFVolts + turnController.calculate(turningMotor.getAngularPositionRad());
     } else {
       turnController.reset();
     }
@@ -48,12 +51,14 @@ public class LauncherIOSim implements LauncherIO {
     inputs.turningMotorConnected = true;
     inputs.turningMotorAppliedVolts = turningAppliedVolts;
     inputs.turningMotorCurrentAmps = Math.abs(turningMotor.getCurrentDrawAmps());
+    inputs.turningMotorPositionDeg = turningMotor.getAngularPositionRad();
   }
 
   @Override
-  public void setShooterSpeed(double speed) {
-  }
+  public void setShooterSpeed(double speed) {}
 
-  public void setHoodAngleSetpoint(double angleDegrees) {
+  public void setHoodAngleSetpoint(double setpoint) {
+    System.out.println(setpoint);
+    turningMotor.setAngle(setpoint);
   }
 }

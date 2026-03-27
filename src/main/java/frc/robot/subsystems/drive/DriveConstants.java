@@ -17,7 +17,7 @@ import edu.wpi.first.math.util.Units;
 public class DriveConstants {
 
   // put a limiter here in order to reduce the speed of the drivetrain
-  public static final double MAX_SPEED_METERS_PER_SEC = 4.8;
+  public static final double MAX_SPEED_METERS_PER_SEC = 3.3;
 
   public static final double STRAFE_SPEED = 2.00;
 
@@ -55,7 +55,7 @@ public class DriveConstants {
   public static final int BACK_LEFT_CANCODER_ID = 23;
   public static final int BACK_RIGHT_CANCODER_ID = 33;
   // Drive motor configuration
-  public static final int DRIVE_MOTOR_MAX_AMPERAGE = 50;
+  public static final int DRIVE_MOTOR_MAX_AMPERAGE = 45;
   public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(2);
   public static final double DRIVE_MOTOR_REDUCTION = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
   // ported from last year
@@ -63,17 +63,19 @@ public class DriveConstants {
 
   // Drive encoder configuration
   public static final double DRIVE_ENCODER_POSITION_FACTOR =
-      2 * Math.PI / DRIVE_MOTOR_REDUCTION; // Rotor Rotations ->
+      2 * Math.PI / DRIVE_MOTOR_REDUCTION; // Rotor Rotations
+  // ->
   // Wheel Radians
   public static final double DRIVE_ENCODER_VELOCITY_FACTOR =
-      (2 * Math.PI) / 60.0 / DRIVE_MOTOR_REDUCTION; // Rotor RPM ->
+      (2 * Math.PI) / 60.0 / DRIVE_MOTOR_REDUCTION; // Rotor
+  // RPM ->
   // Wheel Rad/Sec
 
   // Drive PID configuration
   public static final double DRIVE_KP = 0.0;
   public static final double DRIVE_KD = 0.0;
-  public static final double DRIVE_KS = 0.0;
-  public static final double DRIVE_KV = 0.1;
+  public static final double DRIVE_KS = 0.17566;
+  public static final double DRIVE_KV = 0.13282;
   public static final double DRIVE_SIMP = 0.05;
   public static final double DRIVE_SIMD = 0.0;
   public static final double DRIVE_SIMKS = 0.0;
@@ -81,26 +83,28 @@ public class DriveConstants {
 
   // Turn motor configuration
   public static final boolean TURN_INVERTED = true;
-  public static final int TURN_MOTOR_MAX_AMPERAGE = 50;
+  public static final int TURN_MOTOR_MAX_AMPERAGE = 30;
   public static final double TURN_MOTOR_REDUCTION = 150 / 7;
   public static final DCMotor turnGearbox = DCMotor.getNEO(1);
   // Turn encoder configuration
   public static final boolean TURN_ENCODER_INVERTED = true;
   public static final double TURN_ENCODER_POSITION_FACTOR =
-      2 * Math.PI / TURN_MOTOR_REDUCTION; // Rotations -> Radians
+      2 * Math.PI / TURN_MOTOR_REDUCTION; // Rotations ->
+  // Radians
   public static final double TURN_ENCODER_VELOCITY_FACTOR =
-      (2 * Math.PI) / 60.0 / TURN_MOTOR_REDUCTION; // RPM -> Rad/Sec
+      (2 * Math.PI) / 60.0 / TURN_MOTOR_REDUCTION; // RPM ->
+  // Rad/Sec
 
   // Turn PID configuration
-  public static final double TURN_KP = 0.5;
-  public static final double TURN_KD = 0.1;
+  public static final double TURN_KP = 0.75;
+  public static final double TURN_KD = 0.0;
   public static final double TURN_SIMP = 8.0;
   public static final double TURN_SIMD = 0.0;
   public static final double TURN_PID_MIN_INPUT = 0; // Radians
   public static final double TURN_PID_MAX_INPUT = 2 * Math.PI; // Radians
 
   // PathPlanner configuration
-  public static final double ROBOT_MASS_KG = 74.088;
+  public static final double ROBOT_MASS_KG = Units.lbsToKilograms(104.9);
   public static final double ROBOT_MOI = 6.883;
   public static final double WHEEL_COF = 1.2;
   public static final RobotConfig ppConfig =

@@ -14,10 +14,10 @@ import frc.robot.subsystems.hopper.Hopper;
 public class HopperCommands {
   public static Command runHopperCommand(Hopper hopper) {
     return Commands.run(
-        () -> {
-          hopper.runHopper(HOPPER_NORMAL_SPEED);
-        },
-        hopper)
+            () -> {
+              hopper.runHopper(HOPPER_NORMAL_SPEED);
+            },
+            hopper)
         .finallyDo(
             () -> {
               hopper.stopHopper();
@@ -26,10 +26,10 @@ public class HopperCommands {
 
   public static Command runIndexerCommand(Hopper hopper) {
     return Commands.run(
-        () -> {
-          hopper.runIndexer(INDEXER_NORMAL_SPEED);
-        },
-        hopper)
+            () -> {
+              hopper.runIndexer(INDEXER_NORMAL_SPEED);
+            },
+            hopper)
         .finallyDo(
             () -> {
               hopper.stopIndexer();
@@ -38,13 +38,27 @@ public class HopperCommands {
 
   public static Command runIndexerReverseCommand(Hopper hopper) {
     return Commands.run(
-        () -> {
-          hopper.runIndexer(-INDEXER_NORMAL_SPEED);
-        },
-        hopper)
+            () -> {
+              hopper.runIndexer(-INDEXER_NORMAL_SPEED);
+            },
+            hopper)
         .finallyDo(
             () -> {
               hopper.stopIndexer();
+            });
+  }
+
+  public static Command runIndexerAndHopperCommand(Hopper hopper) {
+    return Commands.run(
+            () -> {
+              hopper.runIndexer(INDEXER_NORMAL_SPEED);
+              hopper.runHopper(HOPPER_NORMAL_SPEED);
+            },
+            hopper)
+        .finallyDo(
+            () -> {
+              hopper.stopIndexer();
+              hopper.stopHopper();
             });
   }
 }
